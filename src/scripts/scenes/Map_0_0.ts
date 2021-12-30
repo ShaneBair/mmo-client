@@ -1,23 +1,16 @@
 import Phaser from 'phaser';
-import MergedInput from 'phaser3-merged-input';
 
 export default class Map_0_0 extends Phaser.Scene {
   map: Phaser.Tilemaps.Tilemap;
-  playerControls: any;
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   playerContainer: Phaser.GameObjects.Container;
   player: Phaser.GameObjects.Sprite;
   mapCollisions: Phaser.GameObjects.GameObject[];
   collisionLayers: any[];
-  mergedInput: any;
 
   constructor() {
     super({ key: 'Map_0_0' })
     this.collisionLayers = [];
-  }
-
-  preload() {
-    this.load.scenePlugin('mergedInput', MergedInput);
   }
 
   create() {
@@ -26,7 +19,6 @@ export default class Map_0_0 extends Phaser.Scene {
     this.createPlayer();
     this.createCollisions();
 
-    this.playerControls = this.mergedInput.addPlayer(0);
     this.cursors = this.input.keyboard.createCursorKeys();
   }
 
