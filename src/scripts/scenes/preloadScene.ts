@@ -4,11 +4,21 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('phaser-logo', 'assets/img/phaser-logo.png')
+    this.load.image('terrain', 'assets/map/tiles/terrain.png');
+    this.load.image('castle', 'assets/map/tiles/castle.png');
+    this.load.image('outside', 'assets/map/tiles/outside.png');
+    this.load.image('house', 'assets/map/tiles/house.png');
+
+    this.load.tilemapTiledJSON('Map_0_0', 'assets/map/map-0-0-town.json');
+
+    this.load.spritesheet("chara2", 'assets/img/spritesheets/chara2.png', {
+      frameWidth: 26,
+      frameHeight: 36,
+     });
   }
 
   create() {
-    this.scene.start('MainScene')
+    this.scene.start('Map_0_0')
 
     /**
      * This is how you would dynamically import the mainScene class (with code splitting),
