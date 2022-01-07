@@ -2,8 +2,8 @@ import 'phaser'
 import Map_0_0 from './scenes/Map_0_0'
 import PreloadScene from './scenes/preloadScene'
 
-const DEFAULT_WIDTH = 1280
-const DEFAULT_HEIGHT = 720
+const DEFAULT_WIDTH = 640;
+const DEFAULT_HEIGHT = 360;
 
 const config = {
   type: Phaser.AUTO,
@@ -14,6 +14,9 @@ const config = {
     autoCenter: Phaser.Scale.CENTER_BOTH,
     width: DEFAULT_WIDTH,
     height: DEFAULT_HEIGHT
+  },
+  input: {
+    gamepad: true
   },
   scene: [PreloadScene, Map_0_0],
   physics: {

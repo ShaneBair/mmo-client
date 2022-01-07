@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import MultiInputHandler, { PlayerInput } from '../tools/MultiInputHandler';
+import CollisionObject from '../objects/CollisionObject';
 
 export default class Map_0_0 extends Phaser.Scene {
   map: Phaser.Tilemaps.Tilemap;
@@ -7,19 +9,36 @@ export default class Map_0_0 extends Phaser.Scene {
   player: Phaser.GameObjects.Sprite;
   mapCollisions: Phaser.GameObjects.GameObject[];
   collisionLayers: any[];
+  multiInputHandler: MultiInputHandler;
+  playerInput: PlayerInput; 
+  sortGroup: Phaser.GameObjects.Group;
 
   constructor() {
     super({ key: 'Map_0_0' })
     this.collisionLayers = [];
   }
 
+  preload() {
+    this.load.scenePlugin('multiInputHandler', MultiInputHandler);
+  }
+
   create() {
+    this.sortGroup = this.add.group();
+
     this.createMap();
     this.createAnimations();
     this.createPlayer();
     this.createCollisions();
 
-    this.cursors = this.input.keyboard.createCursorKeys();
+    //this.cursors = this.input.keyboard.createCursorKeys();
+    this.playerInput = this.multiInputHandler.addPlayer(0);
+    this.multiInputHandler
+      .defineKeys(0, 'UP', ['W', 'B12'])
+      .defineKeys(0, 'DOWN', ['S', 'B13'])
+      .defineKeys(0, 'LEFT', ['A', 'B14'])
+      .defineKeys(0, 'RIGHT', ['D', 'B15'])
+      .defineKeys(0, 'ATTACK', ['J', 'B0']);
+
   }
 
   createMap() {
@@ -32,18 +51,33 @@ export default class Map_0_0 extends Phaser.Scene {
 
     const baseLayer = this.map.createLayer("Base Terrain", this.map.tilesets);
     this.map.createLayer("Paths", this.map.tilesets);
-    const houseLayer = this.map.createLayer("Houses", this.map.tilesets).setCollisionByExclusion([-1], true);
-    const highlightsLayer = this.map.createLayer("Terrain Highlights", this.map.tilesets).setCollisionByExclusion([-1], true);
+    const houseLayer = this.map.createLayer("Houses", this.map.tilesets).setZ(20).setDepth(2).setCollisionByExclusion([-1], true);
+    const highlightsLayer = this.map.createLayer("Terrain Highlights", this.map.tilesets).setZ(20).setDepth(20).setCollisionByExclusion([-1], true);
 
     this.collisionLayers.push(houseLayer);
     this.collisionLayers.push(highlightsLayer);
   }
 
   createCollisions() {
-    this.collisionLayers.forEach(layer => {
-      console.log(layer);
-      this.physics.add.collider(this.playerContainer, layer);
-    });
+    // this.collisionLayers.forEach(layer => {
+    //   //console.log(layer);
+    //   this.physics.add.collider(this.playerContainer, layer);
+    // });
+
+    const objectConfig: Phaser.Types.Tilemaps.CreateFromObjectLayerConfig = {
+      //classType: CollisionObject,
+    };
+    const collisionObjects = this.map.createFromObjects('Collisions', objectConfig);
+    collisionObjects.forEach((object) =>{
+      const currentSprite = object as Phaser.GameObjects.Container;
+
+      this.physics.world.enable(currentSprite);
+      currentSprite.setVisible(false);
+      //currentSprite.setY(currentSprite.y + currentSprite.height);
+      this.physics.add.collider(this.playerContainer, currentSprite);
+
+      console.log(`sprite = x: ${currentSprite.x} y: ${currentSprite.y} originX: ${currentSprite.originX} originY: ${currentSprite.originY} width: ${currentSprite.width} height: ${currentSprite.height}`);
+    })
   }
 
   createAnimations() {
@@ -87,8 +121,8 @@ export default class Map_0_0 extends Phaser.Scene {
   }
 
   createPlayer() {
-    this.player = this.add.sprite(0, 0, "chara2", 1);
-    this.playerContainer = this.add.container(170, 240);
+    this.player = this.add.sprite(0, 0, "chara2", 1).setZ(10).setDepth(10);
+    this.playerContainer = this.add.container(170, 240).setZ(10).setDepth(10);
     this.playerContainer.setSize(26, 36);
     
     this.physics.world.enable(this.playerContainer);
@@ -97,10 +131,11 @@ export default class Map_0_0 extends Phaser.Scene {
 
     this.updateCamera();
 
-    (this.playerContainer.body as Phaser.Physics.Arcade.Body).setCollideWorldBounds(true);
+    (this.playerContainer.body as Phaser.Physics.Arcade.Body);//.setCollideWorldBounds(true);
   }
 
   updateCamera() {
+    console.log(this.map.widthInPixels, this.map.heightInPixels);
     this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
     this.cameras.main.startFollow(this.playerContainer);
     this.cameras.main.roundPixels = true;
@@ -112,28 +147,37 @@ export default class Map_0_0 extends Phaser.Scene {
 
       containerBody.setVelocity(0);
 
-      // Horizontal movement
-      if (this.cursors.left.isDown) {
+      this.input.gamepad.gamepads.forEach((pad, padIndex) => {
+        pad.axes.forEach((axe, axeIndex) => {
+          if(axe.value >= axe.threshold) {
+            console.log(padIndex, axeIndex, axe);
+          }
+        });
+      });
+      if(this.input?.gamepad?.pad1?.down) {
+        console.log('down');
+      }
+
+      if(this.playerInput.direction.LEFT) {
         containerBody.setVelocityX(-80);
-      } else if (this.cursors.right.isDown) {
+      } else if(this.playerInput.direction.RIGHT) {
         containerBody.setVelocityX(80);
       }
 
-      // Vertical movement
-      if (this.cursors.up.isDown) {
+      if(this.playerInput.direction.UP) {
         containerBody.setVelocityY(-80);
-      } else if (this.cursors.down.isDown) {
+      } else if(this.playerInput.direction.DOWN) {
         containerBody.setVelocityY(80);
       }
 
       // Update the animation last and give left/right animations precedence over up/down animations
-      if (this.cursors.left.isDown) {
+      if (this.playerInput.direction.LEFT) {
         this.player.anims.play('left', true);
-      } else if (this.cursors.right.isDown) {
+      } else if (this.playerInput.direction.RIGHT) {
         this.player.anims.play('right', true);
-      } else if (this.cursors.up.isDown) {
+      } else if (this.playerInput.direction.UP) {
         this.player.anims.play('up', true);
-      } else if (this.cursors.down.isDown) {
+      } else if (this.playerInput.direction.DOWN) {
         this.player.anims.play('down', true);
       } else {
         this.player.anims.stop();
