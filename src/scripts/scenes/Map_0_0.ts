@@ -64,19 +64,15 @@ export default class Map_0_0 extends Phaser.Scene {
     //   this.physics.add.collider(this.playerContainer, layer);
     // });
 
-    const objectConfig: Phaser.Types.Tilemaps.CreateFromObjectLayerConfig = {
-      //classType: CollisionObject,
-    };
+    const objectConfig: Phaser.Types.Tilemaps.CreateFromObjectLayerConfig = {};
     const collisionObjects = this.map.createFromObjects('Collisions', objectConfig);
     collisionObjects.forEach((object) =>{
-      const currentSprite = object as Phaser.GameObjects.Container;
+      const currentSprite = object as Phaser.GameObjects.Sprite;
 
       this.physics.world.enable(currentSprite);
       currentSprite.setVisible(false);
-      //currentSprite.setY(currentSprite.y + currentSprite.height);
+      (currentSprite.body as Phaser.Physics.Arcade.Body).setImmovable(true);
       this.physics.add.collider(this.playerContainer, currentSprite);
-
-      console.log(`sprite = x: ${currentSprite.x} y: ${currentSprite.y} originX: ${currentSprite.originX} originY: ${currentSprite.originY} width: ${currentSprite.width} height: ${currentSprite.height}`);
     })
   }
 
