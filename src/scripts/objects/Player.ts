@@ -36,7 +36,7 @@ export default class Player {
       },
       destroyed: false,
     };
-    this.walkingSpeed = 4;
+    this.walkingSpeed = 3;
 
     this.createAnimations();
     this.createPlayer(x, y);
@@ -92,14 +92,15 @@ export default class Player {
   }
 
   createPlayer(x: number | undefined, y: number | undefined) {
-    this.sprite = this.scene.matter.add.sprite(0, 0, "chara2", 1).setZ(10).setDepth(10);
+    this.sprite = this.scene.matter.add.sprite(0, 0, "chara2", 1).setZ(100).setDepth(100);
 
     const { width: w, height: h } = this.sprite;
-    const mainBody = this.scene.matter.bodies.rectangle(0, 0, w * 0.6, h, {chamfer: {radius: 10}});
+    const mainBody = this.scene.matter.bodies.rectangle(0, h * 0.05, w * 0.6, h * 0.8, {chamfer: {radius: 10}, isSensor: false});
+    
     this.sensors = {
       bottom: this.scene.matter.bodies.rectangle(0, h * 0.5, w * 0.25, 2, { isSensor: true }),
-      left: this.scene.matter.bodies.rectangle(-w * 0.35, 0, 2, h * 0.5, { isSensor: true }),
-      right: this.scene.matter.bodies.rectangle(w * 0.35, 0, 2, h * 0.5, { isSensor: true }),
+      left: this.scene.matter.bodies.rectangle(-w * 0.35, h * 0.25 , 2, h * 0.25, { isSensor: true }),
+      right: this.scene.matter.bodies.rectangle(w * 0.35, h * 0.25, 2, h * 0.25, { isSensor: true }),
     };
     const compoundBody = this.scene.matter.body.create({
       parts: [mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right],
@@ -178,10 +179,8 @@ export default class Player {
 
     if (bodyA === this.sensors.left) {
       this.state.isTouching.left = true;
-      if (pair.separation > 0.5) this.sprite.x += pair.separation - 0.5;
     } else if (bodyA === this.sensors.right) {
       this.state.isTouching.right = true;
-      if (pair.separation > 0.5) this.sprite.x -= pair.separation - 0.5;
     } else if (bodyA === this.sensors.bottom) {
       this.state.isTouching.bottom = true;
     }

@@ -30,7 +30,7 @@ export default class DemoScene extends Phaser.Scene {
 
         const pathLayer = this.map.createLayer("Paths", this.map.tilesets).setCollisionByProperty( {collides: true});
         const worldLayer = this.map.createLayer("World", this.map.tilesets).setCollisionByProperty( {collides: true});
-        const abovePlayerLayer = this.map.createLayer("Above Player", this.map.tilesets).setCollisionByProperty( {collides: true});
+        const abovePlayerLayer = this.map.createLayer("Above Player", this.map.tilesets).setCollisionByProperty( {collides: true}).setDepth(20);
 
         this.matter.world.convertTilemapLayer(pathLayer);
         this.matter.world.convertTilemapLayer(worldLayer);

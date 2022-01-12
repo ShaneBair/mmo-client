@@ -1,24 +1,36 @@
+import { SceneHandoffData } from "../objects/SceneEx";
+
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
     super({ key: 'PreloadScene' })
   }
 
-  preload() {
-    this.load.image('terrain', 'assets/map/tiles/terrain.png');
-    this.load.image('castle', 'assets/map/tiles/castle.png');
-    this.load.image('outside', 'assets/map/tiles/outside.png');
-    this.load.image('house', 'assets/map/tiles/house.png');
-
-    this.load.tilemapTiledJSON('Map_0_0', 'assets/map/map-0-0-town.json');
-
-    this.load.spritesheet("chara2", 'assets/img/spritesheets/chara2.png', {
-      frameWidth: 26,
-      frameHeight: 36,
-     });
-  }
-
   create() {
-    this.scene.start('Map_0_0')
+    const handoffData: SceneHandoffData = {
+      transitionProperties: [
+        {
+          name: "scene",
+          value: "AutoScene",
+          type: "string"
+        },
+        {
+          name: "map",
+          value: "DemoScene",
+          type: "string"
+        },
+        {
+          name: "type",
+          value: "transition",
+          type: "string"
+        },
+        {
+          name: "transitionEffect",
+          value: "fade",
+          type: "string"
+        }
+      ]
+    };
+    this.scene.start("AutoScene", handoffData);
 
     /**
      * This is how you would dynamically import the mainScene class (with code splitting),

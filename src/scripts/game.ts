@@ -1,6 +1,7 @@
 import 'phaser'
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
-import DemoScene from './scenes/DemoScene';
+import PreloadScene from './scenes/preloadScene';
+import AutoScene from './scenes/AutoScene';
 
 const DEFAULT_WIDTH = 640;
 const DEFAULT_HEIGHT = 360;
@@ -18,7 +19,7 @@ const config: Phaser.Types.Core.GameConfig = {
   input: {
     gamepad: true
   },
-  scene: DemoScene,
+  scene: [ PreloadScene, AutoScene],
   physics: {
     default: 'matter',
     // arcade: {
