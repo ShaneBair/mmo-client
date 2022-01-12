@@ -130,6 +130,59 @@
         }, 
         {
          "draworder":"topdown",
+         "id":14,
+         "name":"Actors",
+         "objects":[
+                {
+                 "height":0,
+                 "id":7,
+                 "name":"BrownRabbit",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":229.333333333333,
+                 "y":71.3333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":8,
+                 "name":"BrownRabbit",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":133.333333333333,
+                 "y":454
+                }, 
+                {
+                 "height":0,
+                 "id":9,
+                 "name":"BrownRabbit",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":364.666666666667,
+                 "y":439.333333333333
+                }],
+         "opacity":1,
+         "properties":[
+                {
+                 "name":"depth",
+                 "type":"int",
+                 "value":100
+                }],
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":6,
          "name":"Spawn",
          "objects":[
@@ -235,8 +288,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":14,
- "nextobjectid":7,
+ "nextlayerid":15,
+ "nextobjectid":10,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

@@ -5,6 +5,26 @@ export default class PreloadScene extends Phaser.Scene {
     super({ key: 'PreloadScene' })
   }
 
+  preload() {
+    this.load.image('terrain', 'assets/map/tiles/terrain.png');
+    this.load.image('castle', 'assets/map/tiles/castle.png');
+    this.load.image('outside', 'assets/map/tiles/outside.png');
+    this.load.image('house', 'assets/map/tiles/house.png');
+    this.load.image('doors', 'assets/map/tiles/animated/doors.png');
+    this.load.image('water', 'assets/map/tiles/water.png');
+    this.load.image('inside', 'assets/map/tiles/inside.png');
+
+		this.load.spritesheet("chara2", 'assets/img/spritesheets/chara2.png', {
+			frameWidth: 26,
+			frameHeight: 36,
+		});
+
+		this.load.spritesheet("animals2", 'assets/img/spritesheets/animals2.png', {
+			frameWidth: 42,
+			frameHeight: 36		
+		});
+  }
+
   create() {
     const handoffData: SceneHandoffData = {
       transitionProperties: [

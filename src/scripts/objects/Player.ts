@@ -1,4 +1,4 @@
-import Phaser, { Physics } from "phaser";
+import Phaser from "phaser";
 import MultiKey from "../tools/MultiKey";
 import SceneEx from "./SceneEx";
 
@@ -174,7 +174,7 @@ export default class Player {
     }
   }
 
-  onSensorCollide({ bodyA, bodyB, pair }) {
+  onSensorCollide({ bodyA, bodyB }) {
     if (bodyB.isSensor) return; // We only care about collisions with physical objects
 
     if (bodyA === this.sensors.left) {
