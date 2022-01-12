@@ -120,7 +120,7 @@
                 {
                  "name":"depth",
                  "type":"int",
-                 "value":50
+                 "value":200
                 }],
          "type":"tilelayer",
          "visible":true,

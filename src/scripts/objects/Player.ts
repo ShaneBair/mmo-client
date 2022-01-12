@@ -26,7 +26,7 @@ export default class Player {
   };
   walkingSpeed: number;
 
-  constructor(scene: Phaser.Scene, x: number | undefined, y: number | undefined) {
+  constructor(scene: Phaser.Scene, x: number | undefined, y: number | undefined, z: number) {
     this.scene = scene;
     this.state = {
       isTouching: {
@@ -39,7 +39,7 @@ export default class Player {
     this.walkingSpeed = 3;
 
     this.createAnimations();
-    this.createPlayer(x, y);
+    this.createPlayer(x, y, z);
     this.createControls();
 
     this.state.destroyed = false;
@@ -91,8 +91,8 @@ export default class Player {
     }
   }
 
-  createPlayer(x: number | undefined, y: number | undefined) {
-    this.sprite = this.scene.matter.add.sprite(0, 0, "chara2", 1).setZ(100).setDepth(100);
+  createPlayer(x: number | undefined, y: number | undefined, z: number) {
+    this.sprite = this.scene.matter.add.sprite(0, 0, "chara2", 1).setZ(z).setDepth(z);
 
     const { width: w, height: h } = this.sprite;
     const mainBody = this.scene.matter.bodies.rectangle(0, h * 0.05, w * 0.6, h * 0.8, {chamfer: {radius: 10}, isSensor: false});

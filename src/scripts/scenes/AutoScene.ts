@@ -1,5 +1,5 @@
 import { EventData } from "phaser-matter-collision-plugin";
-import { findPropertyByName } from "../objects/TiledHelpers";
+import { findPropertyByName, TiledProperty } from "../objects/TiledHelpers";
 import Player from "../objects/Player";
 import SceneEx, { SceneHandoffData } from "../objects/SceneEx";
 import mapService from "../services/MapService";
@@ -53,12 +53,12 @@ export default class DemoScene extends SceneEx {
 
         this.createMapTileLayers();
 
+        const spawnLayer = this.map.getObjectLayer("Spawn");
         const { x, y } = this.findPlayerSpawnPoint(toSpawnIdProperty?.value);
-        //const z = findPropertyByName(th, "depth")?.value);
-        this.player = new Player(this, x, y);
+        const z = findPropertyByName(this.map.getObjectLayer("Spawn").properties as unknown as TiledProperty[], "depth")?.value ?? 0;
 
+        this.player = new Player(this, x, y, z);
         this.updateCamera();
-
         this.createTransitionPoints();
         this.cameras.main.fadeIn(1000, 0, 0, 0);
     }
