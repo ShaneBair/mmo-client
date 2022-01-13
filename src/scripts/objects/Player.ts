@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import MultiKey from "../tools/MultiKey";
 import SceneEx from "./SceneEx";
+import { Directions } from "./types";
 
 export default class Player {
   scene: Phaser.Scene;
@@ -10,6 +11,7 @@ export default class Player {
     down: MultiKey,
     left: MultiKey,
     right: MultiKey,
+		attack: MultiKey,
   };
   sensors: { 
     bottom: MatterJS.BodyType; 
@@ -22,6 +24,7 @@ export default class Player {
       right: boolean;
       bottom: boolean;
     },
+		facing: Directions,
     destroyed: boolean;
   };
   walkingSpeed: number;
@@ -34,6 +37,7 @@ export default class Player {
         right: false,
         bottom: false,
       },
+			facing: Directions.S,
       destroyed: false,
     };
     this.walkingSpeed = 3;
@@ -63,6 +67,7 @@ export default class Player {
       up: this.keys.up.isDown(),
       down: this.keys.down.isDown(),
     };
+		const attacking = this.keys.attack.isDown();
 
     sprite.setVelocity(0);
     if(moving.left) {
@@ -77,17 +82,79 @@ export default class Player {
       sprite.setVelocityY(this.walkingSpeed);
     }
 
+		if(attacking) {
+			this.sprite.setScale(0.3).setFixedRotation();
+		} else {
+			this.sprite.setScale(1).setFixedRotation();
+		}
+
+		this.sprite.flipX = false;
     // Update the animation last and give left/right animations precedence over up/down animations
-    if (moving.left) {
-      this.sprite.anims.play('left', true);
-    } else if (moving.right) {
-      this.sprite.anims.play('right', true);
-    } else if (moving.up) {
-      this.sprite.anims.play('up', true);
+		if(moving.left) {
+			this.state.facing = Directions.W;
+
+			if(attacking) {
+				this.sprite.anims.play('attack', true);
+			} else {
+				this.sprite.anims.play('left', true);
+			}
+		} else if(moving.right) {
+			this.state.facing = Directions.E;
+
+			if(attacking) {
+				this.sprite.anims.play('attack', true);
+				this.sprite.flipX = true;
+			} else {
+				this.sprite.anims.play('right', true);
+			}
+		} else if (moving.up) {
+			this.state.facing = Directions.N;
+
+			if(attacking) {
+				this.sprite.anims.play('attack', true);
+			} else {
+				this.sprite.anims.play('up', true);
+			}
     } else if (moving.down) {
-      this.sprite.anims.play('down', true);
+			this.state.facing = Directions.S;
+
+			if(attacking) {
+				this.sprite.anims.play('attack', true);
+			} else {
+				this.sprite.anims.play('down', true);
+			}
+		} else if(attacking) {
+			if(this.state.facing === Directions.E) {
+				this.sprite.flipX = true;
+			}
+
+			this.sprite.play('attack', true);
     } else {
+			let animation = "";
+			let frame = 0;
+
+			switch(this.state.facing) {
+				case Directions.W:
+					animation = "left",
+					frame = 13
+					break;
+				case Directions.E:
+					animation = "right",
+					frame = 25
+					break;
+				case Directions.N:
+					animation = "up",
+					frame = 37
+					break;
+				case Directions.S:
+					animation = "down",
+					frame = 1
+					break;
+			}
+
+			this.sprite.anims.play(animation);
       this.sprite.anims.stop();
+			this.sprite.setFrame(frame);
     }
   }
 
@@ -157,20 +224,30 @@ export default class Player {
       frameRate: 10,
       repeat: -1
     };
+		const attackAnimation: Phaser.Types.Animations.Animation = {
+			key: 'attack',
+			frames: anims.generateFrameNumbers('red-outfit-blonde-sv', {
+				frames: [3, 4, 5]
+			}),
+			frameRate: 10,
+			repeat: -1,
+		};
 
     anims.create(leftAnimation);
     anims.create(rightAnimation);
     anims.create(upAnimation);
     anims.create(downAnimation);
+		anims.create(attackAnimation);
   }
 
   createControls() {
-    const { LEFT, RIGHT, UP, DOWN, A, S, D, W } = Phaser.Input.Keyboard.KeyCodes;
+    const { LEFT, RIGHT, UP, DOWN, A, S, D, W, SPACE } = Phaser.Input.Keyboard.KeyCodes;
     this.keys = {
       up: new MultiKey(this.scene, [UP, W]),
       down: new MultiKey(this.scene, [DOWN, S]),
       left: new MultiKey(this.scene, [LEFT, A]),
       right: new MultiKey(this.scene, [RIGHT, D]),
+			attack: new MultiKey(this.scene, [SPACE]),
     }
   }
 

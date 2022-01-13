@@ -13,3 +13,10 @@ export class Guid {
     });
   }
 }
+
+export enum Directions {
+	N,
+	S,
+	E,
+	W
+}
