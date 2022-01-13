@@ -1,6 +1,7 @@
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
+import actorFactory from "../factories/ActorFactory";
 import actorService from "../services/ActorService";
-import Actor from "./Actor";
+import Actor from "./Actors/Actor";
 import Player from "./Player";
 import { findPropertyByName, TiledProperty } from "./TiledHelpers";
 
@@ -65,21 +66,13 @@ export default class SceneEx extends Phaser.Scene {
 
 	createActors() {
 		const objectLayer = this.map.getObjectLayer("Actors");
+		const depth = findPropertyByName(objectLayer.properties as unknown as TiledProperty[], "depth")?.value ?? 0;
 
 		objectLayer.objects.forEach((object: Phaser.Types.Tilemaps.TiledObject) => {
-			if(!object.x || !object.y) return;
-			
-			const actorInfo = actorService.getActorByKey(object.name);
+			const actor = actorFactory.createActor(this, object, depth);
 
-			this.actors.push(new Actor(
-				this, 
-				{
-					x: object.x, 
-					y: object.y, 
-					z: findPropertyByName(objectLayer.properties as unknown as TiledProperty[], "depth")?.value ?? 0
-				}, 
-				actorInfo)
-			);
+			if(actor) 
+				this.actors.push(actor);
 		});
 	}
 

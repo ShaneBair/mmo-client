@@ -36,7 +36,8 @@ export interface ActorInfo {
 	},
 }
 
-enum ActorType {
+export enum ActorType {
+	Actor,
 	NPC,
 	Enemy,
 	Animal,
