@@ -52,7 +52,7 @@ const actorDB: Record<string, ActorInfo> = {
 		type: ActorType.Animal,
 		defaultFrame: 19,
 		movement: {
-			walkSpeed: 2,
+			walkSpeed: 3,
 			changeDirectionFrequency: 300,
 			tendency: 10,
 		},
@@ -91,7 +91,7 @@ const actorDB: Record<string, ActorInfo> = {
 					width: 25,
 					height: 25,
 					config: { 
-						isSensor: true,
+						isSensor: false,
 						label: "BrownRabbit"
 					}
 				},
@@ -148,7 +148,7 @@ const actorDB: Record<string, ActorInfo> = {
 					width: 25,
 					height: 15,
 					config: { 
-						isSensor: true,
+						isSensor: false,
 						label: "GreySquirrel"
 					}
 				},
