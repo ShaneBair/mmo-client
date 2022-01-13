@@ -68,7 +68,7 @@ export default class SceneEx extends Phaser.Scene {
 
 		objectLayer.objects.forEach((object: Phaser.Types.Tilemaps.TiledObject) => {
 			if(!object.x || !object.y) return;
-	
+			
 			const actorInfo = actorService.getActorByKey(object.name);
 
 			this.actors.push(new Actor(
@@ -81,6 +81,12 @@ export default class SceneEx extends Phaser.Scene {
 				actorInfo)
 			);
 		});
+	}
+
+	removeActor(guid: string) {
+		this.actors.forEach( (item, index) => {
+			if(item.guid === guid) this.actors.splice(index, 1);
+		})
 	}
 
 	handleSceneTransition(object: Phaser.Types.Tilemaps.TiledObject) {

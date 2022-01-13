@@ -168,6 +168,30 @@
                  "width":0,
                  "x":364.666666666667,
                  "y":439.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":10,
+                 "name":"GreySquirrel",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":516,
+                 "y":446
+                }, 
+                {
+                 "height":0,
+                 "id":11,
+                 "name":"GreySquirrel",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":455.333333333333,
+                 "y":388
                 }],
          "opacity":1,
          "properties":[
@@ -289,7 +313,7 @@
          "y":0
         }],
  "nextlayerid":15,
- "nextobjectid":10,
+ "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

@@ -95,12 +95,12 @@ export default class Player {
     this.sprite = this.scene.matter.add.sprite(0, 0, "chara2", 1).setZ(z).setDepth(z);
 
     const { width: w, height: h } = this.sprite;
-    const mainBody = this.scene.matter.bodies.rectangle(0, h * 0.05, w * 0.6, h * 0.8, {chamfer: {radius: 10}, isSensor: false});
+    const mainBody = this.scene.matter.bodies.rectangle(0, h * 0.05, w * 0.6, h * 0.8, {chamfer: {radius: 10}, isSensor: false, label: "Player Main"});
     
     this.sensors = {
-      bottom: this.scene.matter.bodies.rectangle(0, h * 0.5, w * 0.25, 2, { isSensor: true }),
-      left: this.scene.matter.bodies.rectangle(-w * 0.35, h * 0.25 , 2, h * 0.25, { isSensor: true }),
-      right: this.scene.matter.bodies.rectangle(w * 0.35, h * 0.25, 2, h * 0.25, { isSensor: true }),
+      bottom: this.scene.matter.bodies.rectangle(0, h * 0.5, w * 0.25, 2, { isSensor: true, label: "Player Bottom" }),
+      left: this.scene.matter.bodies.rectangle(-w * 0.35, h * 0.25 , 2, h * 0.25, { isSensor: true, label: "Player Left" }),
+      right: this.scene.matter.bodies.rectangle(w * 0.35, h * 0.25, 2, h * 0.25, { isSensor: true, label: "Player Right" }),
     };
     const compoundBody = this.scene.matter.body.create({
       parts: [mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right],
