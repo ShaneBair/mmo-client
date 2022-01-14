@@ -66,6 +66,9 @@ export default class SceneEx extends Phaser.Scene {
 
 	createActors() {
 		const objectLayer = this.map.getObjectLayer("Actors");
+
+		if(objectLayer === null) return;
+
 		const depth = findPropertyByName(objectLayer.properties as unknown as TiledProperty[], "depth")?.value ?? 0;
 
 		objectLayer.objects.forEach((object: Phaser.Types.Tilemaps.TiledObject) => {
