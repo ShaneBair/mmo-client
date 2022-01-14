@@ -82,12 +82,6 @@ export default class Player {
       sprite.setVelocityY(this.walkingSpeed);
     }
 
-		if(attacking) {
-			this.sprite.setScale(0.3).setFixedRotation();
-		} else {
-			this.sprite.setScale(1).setFixedRotation();
-		}
-
 		this.sprite.flipX = false;
     // Update the animation last and give left/right animations precedence over up/down animations
 		if(moving.left) {
