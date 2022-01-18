@@ -105,7 +105,7 @@ export default class Player {
 			this.state.facing = Directions.N;
 
 			if(attacking) {
-				this.sprite.anims.play('attack', true);
+				this.sprite.anims.play('upAttack', true);
 			} else {
 				this.sprite.anims.play('up', true);
 			}
@@ -113,11 +113,15 @@ export default class Player {
 			this.state.facing = Directions.S;
 
 			if(attacking) {
-				this.sprite.anims.play('attack', true);
+				this.sprite.anims.play('downAttack', true);
 			} else {
 				this.sprite.anims.play('down', true);
 			}
-		} else if(attacking) {
+		} else if(attacking && this.state.facing === Directions.N) {
+			this.sprite.play('upAttack', true);
+    } else if(attacking && this.state.facing === Directions.S) {
+			this.sprite.play('downAttack', true);
+    } else if(attacking) {
 			if(this.state.facing === Directions.E) {
 				this.sprite.flipX = true;
 			}
@@ -226,12 +230,30 @@ export default class Player {
 			frameRate: 10,
 			repeat: -1,
 		};
+		const upAttackAnimation: Phaser.Types.Animations.Animation = {
+			key: 'upAttack',
+			frames: anims.generateFrameNumbers('red-outfit-blonde-sv', {
+				frames: [54, 55, 56]
+			}),
+			frameRate: 10,
+			repeat: -1,
+		};
+		const downAttackAnimation: Phaser.Types.Animations.Animation = {
+			key: 'downAttack',
+			frames: anims.generateFrameNumbers('red-outfit-blonde-sv', {
+				frames: [30, 31, 32]
+			}),
+			frameRate: 10,
+			repeat: -1,
+		};
 
     anims.create(leftAnimation);
     anims.create(rightAnimation);
     anims.create(upAnimation);
     anims.create(downAnimation);
 		anims.create(attackAnimation);
+		anims.create(upAttackAnimation);
+		anims.create(downAttackAnimation);
   }
 
   createControls() {
