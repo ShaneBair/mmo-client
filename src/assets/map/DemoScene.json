@@ -192,6 +192,18 @@
                  "width":0,
                  "x":455.333333333333,
                  "y":388
+                }, 
+                {
+                 "height":0,
+                 "id":12,
+                 "name":"ArmedCitizen",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":240.666666666667,
+                 "y":430
                 }],
          "opacity":1,
          "properties":[
@@ -313,7 +325,7 @@
          "y":0
         }],
  "nextlayerid":15,
- "nextobjectid":12,
+ "nextobjectid":13,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

@@ -27,6 +27,11 @@ export default class PreloadScene extends Phaser.Scene {
 			frameWidth: 42,
 			frameHeight: 36		
 		});
+
+		this.load.spritesheet("ArmedCitizen", 'assets/img/spritesheets/ulpc-sheet-test-36x36.png', {
+			frameWidth: 36,
+			frameHeight: 36,
+		})
   }
 
   create() {

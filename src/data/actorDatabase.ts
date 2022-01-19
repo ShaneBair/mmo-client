@@ -158,6 +158,63 @@ const actorDB: Record<string, ActorInfo> = {
 			xOffset: 0.0,
 			yOffset: 0.3
 		}
+	},
+	ArmedCitizen: {
+		key: "ArmedCitizen",
+		spritesheetKey: "ArmedCitizen",
+		spritesheetPath: "assets/img/spritesheets/ulpc-sheet-test-36x36.png",
+		type: ActorType.Animal,
+		defaultFrame: 17,
+		movement: {
+			walkSpeed: 3,
+			changeDirectionFrequency: 300,
+			tendency: 20,
+		},
+		animations: [
+			{
+				key: 'down',
+				frames: [17, 18, 19, 20, 21, 22, 23, 24, 25],
+				frameRate: 10,
+				repeat: -1
+			},
+			{
+				key: 'left',
+				frames: [8, 9, 10, 11, 12, 13, 14, 15, 16],
+				frameRate: 10,
+				repeat: -1
+			},
+			{
+				key: 'right',
+				frames: [26, 27, 28, 29, 30, 31, 32, 33, 34],
+				frameRate: 10,
+				repeat: -1
+			},
+			{
+				key: 'up',
+				frames: [0, 1, 2, 3, 4, 5, 6, 7],
+				frameRate: 10,
+				repeat: -1
+			}
+		],
+		customShapes: [
+			{
+				shape: ShapeType.Rectangle,
+				shapeInfo: {
+					x: 0,
+					y: 0,
+					width: 30,
+					height: 36,
+					config: { 
+						isSensor: false,
+						label: "ArmedCitizen"
+					}
+				},
+			}
+		],
+		spriteRenderOptions: {
+			xOffset: 0.05,
+			yOffset: 0.3
+		}
 	}
 };
 
