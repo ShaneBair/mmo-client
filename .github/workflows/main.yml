@@ -15,8 +15,10 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install Dependencies
+      - name: Client - Install Dependencies
+        working-directory: ./client
         run: npm install
 
-      - name: Build Packages
+      - name: Client - Build Packages
+        working-directory: ./client
         run: npm run build
