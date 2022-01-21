@@ -19,6 +19,6 @@ jobs:
         working-directory: ./client
         run: npm install
 
-      - name: Client - Build Packages
+      - name: Client - Build Application
         working-directory: ./client
         run: npm run build
