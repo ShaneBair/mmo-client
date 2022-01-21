@@ -22,7 +22,7 @@ jobs:
       
       - name: Client - Dependencies Install
         working-directory: ./client
-        run: npm install
+        run: npm install --force
         
       - name: Build And Deploy
         id: builddeploy
