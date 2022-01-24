@@ -39,6 +39,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^14.2.0",
     "phaser": "^3.60.0-beta.3",
     "phaser-matter-collision-plugin": "^1.0.0"
   },

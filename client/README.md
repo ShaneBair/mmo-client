@@ -205,3 +205,5 @@ A huge thank you to Rich [@photonstorm](https://github.com/photonstorm) for crea
 ## License
 
 The MIT License (MIT) 2021 - [Yannick Deubel](https://github.com/yandeu). Please have a look at the [LICENSE](LICENSE) for more details.
+
+https://icy-pebble-07bd75c0f.1.azurestaticapps.net/
