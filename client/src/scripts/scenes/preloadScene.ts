@@ -18,7 +18,7 @@ export default class PreloadScene extends Phaser.Scene {
 			frameWidth: 26,
 			frameHeight: 36,
 		});
-		this.load.spritesheet("red-outfit-blonde-sv", 'assets/img/spritesheets/red-outfit-blonde-sv-resize.png', {
+		this.load.spritesheet("chara2_1_attacks", 'assets/img/spritesheets/chara2_1_attacks.png', {
 			frameWidth: 48,
 			frameHeight: 36
 		})

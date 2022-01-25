@@ -1,5 +1,5 @@
 {
-  "name": "phaser-project-template",
+  "name": "shane-mmo",
   "version": "3.55.2",
   "description": "Phaser 3 starter template with TypeScript and webpack.",
   "homepage": "https://github.com/yandeu/phaser-project-template#readme",
@@ -22,12 +22,11 @@
     "starter"
   ],
   "author": {
-    "name": "Yannick Deubel",
-    "url": "https://github.com/yandeu"
+    "name": "Shane Bair"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yandeu/phaser-project-template.git"
+    "url": "https://github.com/ShaneBair/mmo-client.git"
   },
   "template": {
     "name": "phaser-project-template",

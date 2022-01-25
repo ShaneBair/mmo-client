@@ -224,7 +224,7 @@ export default class Player {
     };
 		const attackAnimation: Phaser.Types.Animations.Animation = {
 			key: 'attack',
-			frames: anims.generateFrameNumbers('red-outfit-blonde-sv', {
+			frames: anims.generateFrameNumbers('chara2_1_attacks', {
 				frames: [3, 4, 5]
 			}),
 			frameRate: 10,
@@ -232,7 +232,7 @@ export default class Player {
 		};
 		const upAttackAnimation: Phaser.Types.Animations.Animation = {
 			key: 'upAttack',
-			frames: anims.generateFrameNumbers('red-outfit-blonde-sv', {
+			frames: anims.generateFrameNumbers('chara2_1_attacks', {
 				frames: [54, 55, 56]
 			}),
 			frameRate: 10,
@@ -240,7 +240,7 @@ export default class Player {
 		};
 		const downAttackAnimation: Phaser.Types.Animations.Animation = {
 			key: 'downAttack',
-			frames: anims.generateFrameNumbers('red-outfit-blonde-sv', {
+			frames: anims.generateFrameNumbers('chara2_1_attacks', {
 				frames: [30, 31, 32]
 			}),
 			frameRate: 10,
