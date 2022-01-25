@@ -1,4 +1,4 @@
-import { JobApplication } from '../../api/entities/JobApplication';
+import { JobApplication } from '../../entities/JobApplication';
 import { MongoRepository, ObjectID } from 'typeorm';
 import JobApplicationFactory from '../factories/JobApplicationFactory';
 import EntitySeed from './EntitySeed';

@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import config from '../../config';
 import { Inject, Service } from 'typedi';
-import { User } from '../entities/User';
+import { User } from '../../entities/User';
 import { MongoRepository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 import { Logger } from 'winston';

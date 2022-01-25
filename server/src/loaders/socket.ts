@@ -2,7 +2,7 @@ import { Application } from 'express';
 import { Server, createServer } from 'http';
 import { Server as socketServer } from 'socket.io';
 import { useSocketServer } from 'socket-controllers';
-import PlayerSocketController from '../api/socket-controllers/PlayerSocketController';
+import PlayerSocketController from '../socket-controllers/PlayerSocketController';
 
 export default (app: Application): Server => {
   const httpServer = createServer(app);

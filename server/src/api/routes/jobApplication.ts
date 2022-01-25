@@ -3,9 +3,9 @@ import { Container } from 'typedi';
 import { celebrate, Joi } from 'celebrate';
 import JobApplicationService from '../services/JobApplicationService';
 import { Logger } from 'winston';
-import { JobApplication } from '../entities/JobApplication';
+import { JobApplication } from '../../entities/JobApplication';
 import { attachUser, isAuth } from '../middlewares';
-import { User } from '../entities/User';
+import { User } from '../../entities/User';
 import CompanyService from '../services/CompanyService';
 import { ObjectID } from 'typeorm';
 

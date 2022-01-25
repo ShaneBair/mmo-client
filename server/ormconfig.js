@@ -11,9 +11,9 @@ const srcConfig = {
   useUnifiedTopology: true,
   synchronize: true,
   logging: false,
-  entities: ['src/api/entities/**/*.ts'],
+  entities: ['src/entities/**/*.ts'],
   cli: {
-    entitiesDir: 'src/api/entities',
+    entitiesDir: 'src/entities',
   },
 };
 
@@ -24,9 +24,9 @@ const distConfig = {
   useUnifiedTopology: true,
   synchronize: false,
   logging: false,
-  entities: ['dist/api/entities/**/*.js'],
+  entities: ['dist/entities/**/*.js'],
   cli: {
-    entitiesDir: 'dist/api/entities',
+    entitiesDir: 'dist/entities',
   },
 };
 

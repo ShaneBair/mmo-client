@@ -1,5 +1,5 @@
 import Container, { Inject, Service } from 'typedi';
-import { JobApplication } from '../entities/JobApplication';
+import { JobApplication } from '../../entities/JobApplication';
 import { MongoRepository, ObjectID } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 import { Logger } from 'winston';

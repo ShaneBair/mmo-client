@@ -1,5 +1,5 @@
 import * as faker from 'faker';
-import { Company } from '../../api/entities/Company';
+import { Company } from '../../entities/Company';
 
 export default (data?: Company): Company => {
   return new Company({

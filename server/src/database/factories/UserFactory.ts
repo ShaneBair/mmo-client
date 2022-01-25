@@ -1,4 +1,4 @@
-import { User, Role } from '../../api/entities/User';
+import { User, Role } from '../../entities/User';
 import bcrypt from 'bcrypt';
 import * as faker from 'faker';
 

@@ -1,7 +1,7 @@
 import { Container } from 'typedi';
 import { Logger } from 'winston';
 import { Response, NextFunction, Request, RequestHandler } from 'express';
-import { User, Role } from '../entities/User';
+import { User, Role } from '../../entities/User';
 import UserService from '../services/UserService';
 
 const checkRole = (role: Role): RequestHandler => async (

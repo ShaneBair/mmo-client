@@ -1,7 +1,7 @@
 import * as faker from 'faker';
 import { ObjectId } from 'mongodb';
 import { ObjectID } from 'typeorm';
-import { JobApplication } from '../../api/entities/JobApplication';
+import { JobApplication } from '../../entities/JobApplication';
 
 export default (data?: JobApplication): JobApplication => {
   return new JobApplication({

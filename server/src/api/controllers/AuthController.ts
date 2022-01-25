@@ -1,7 +1,7 @@
 import { Container, Service } from 'typedi';
 import UserService from '../services/UserService';
 import { Logger } from 'winston';
-import { User } from '../entities/User';
+import { User } from '../../entities/User';
 
 interface AuthResponse {
   user: User;

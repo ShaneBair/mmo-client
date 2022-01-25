@@ -3,7 +3,7 @@ import { Container } from 'typedi';
 import { celebrate, Joi } from 'celebrate';
 import CompanyService from '../services/CompanyService';
 import { Logger } from 'winston';
-import { Company } from '../entities/Company';
+import { Company } from '../../entities/Company';
 import { checkRole, isAuth } from '../middlewares';
 
 const route = Router();

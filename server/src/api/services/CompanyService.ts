@@ -1,5 +1,5 @@
 import { Inject, Service } from 'typedi';
-import { Company } from '../entities/Company';
+import { Company } from '../../entities/Company';
 import { MongoRepository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 import { Logger } from 'winston';

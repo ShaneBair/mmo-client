@@ -7,10 +7,10 @@ import {
   OnMessage,
   SocketId,
 } from 'socket-controllers';
-import Logger from '../../logger';
+import Logger from '../logger';
 
 @SocketController()
-export default class PlayerSocketController { 
+export default class PlayerSocketController {
   @OnConnect()
   connection(@ConnectedSocket() socket: any, @SocketId() id: string) {
     Logger.debug('client connected:' + id);
