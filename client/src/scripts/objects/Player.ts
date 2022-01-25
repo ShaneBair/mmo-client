@@ -233,7 +233,8 @@ export default class Player {
 		const upAttackAnimation: Phaser.Types.Animations.Animation = {
 			key: 'upAttack',
 			frames: anims.generateFrameNumbers('chara2_1_attacks', {
-				frames: [54, 55, 56]
+				//frames: [54, 55, 56] // Gotta re-edit spritesheets in bulk to add up create attack
+				frames: [30, 31, 32]
 			}),
 			frameRate: 10,
 			repeat: -1,
