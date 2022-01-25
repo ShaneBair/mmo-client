@@ -1,7 +1,7 @@
 {
-  "name": "express-typeorm-rest-boilerplate",
+  "name": "mmo-api",
   "version": "0.4.3",
-  "description": "Boilerplate code to get started with building RESTful API Services",
+  "description": "RESTful API service in express/typescript for my game",
   "main": "dist/app.js",
   "scripts": {
     "start": "node dist/app.js",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bymi15/express-typeorm-rest-boilerplate.git"
+    "url": "https://github.com/ShaneBair/mmo-client.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.com/"
@@ -58,6 +58,8 @@
     "lodash": "^4.17.20",
     "mongodb": "^3.6.2",
     "reflect-metadata": "^0.1.13",
+    "socket-controllers": "^0.0.5",
+    "socket.io": "^4.4.1",
     "typedi": "^0.8.0",
     "typeorm": "^0.2.26",
     "typeorm-typedi-extensions": "^0.2.3",

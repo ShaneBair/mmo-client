@@ -1,6 +1,7 @@
 import server from './server';
 import config from './config';
 import Logger from './logger';
+import 'reflect-metadata';
 
 const startServer = async () => {
   const app = await server();
