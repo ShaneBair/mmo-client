@@ -74,4 +74,52 @@ route.post(
   }
 );
 
+route.delete('/:id', isAuth, async (req, res, next) => {
+  const characterId = req.params.id;
+  const logger: Logger = Container.get('logger');
+  logger.debug(
+    'Calling DELETE to /character/:id endpoint with id: %s',
+    characterId
+  );
+  try {
+    const characterService = Container.get(CharacterService);
+    await characterService.delete(characterId);
+    return res.status(204).end();
+  } catch (e) {
+    return next(e);
+  }
+});
+
+route.put(
+  '/:id',
+  isAuth,
+  celebrate({
+    body: Joi.object({
+      name: Joi.string().optional(),
+      level: Joi.number().optional(),
+      money: Joi.number().optional(),
+      experience: Joi.number().optional(),
+      health: Joi.number().optional(),
+      maxHealth: Joi.number().optional(),
+      mana: Joi.number().optional(),
+      maxMana: Joi.number().optional(),
+    }),
+  }),
+  async (req, res, next) => {
+    const characterId = req.params.id;
+    const logger: Logger = Container.get('logger');
+    logger.debug(
+      'Calling PUT to /company/:id endpoint with body: %o',
+      req.body
+    );
+    try {
+      const characterService = Container.get(CharacterService);
+      const character = await characterService.update(characterId, req.body);
+      return res.status(200).json(character);
+    } catch (e) {
+      return next(e);
+    }
+  }
+);
+
 export default route;
