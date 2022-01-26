@@ -1,6 +1,7 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: ['./src/scripts/game.ts', './webpack/credits.js'],
@@ -35,6 +36,7 @@ module.exports = {
         { from: 'pwa', to: '' },
         { from: 'src/favicon.ico', to: '' }
       ]
-    })
+    }),
+		new Dotenv()
   ]
 }

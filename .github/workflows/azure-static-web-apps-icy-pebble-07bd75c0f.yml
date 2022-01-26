@@ -20,6 +20,14 @@ jobs:
         with:
           submodules: true
       
+      - name: Write Environments File
+        uses: DamianReeves/write-file-action
+        with:
+            path: ./.env
+            contents: |
+                API_URL=$${{ secrets.SERVER_API_URL }}
+            write-mode: overwrite
+      
       - name: Client - Dependencies Install
         working-directory: ./client
         run: npm install --force

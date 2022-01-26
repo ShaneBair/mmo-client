@@ -39,12 +39,14 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^14.2.0",
+    "dotenv-webpack": "^7.0.3",
     "phaser": "^3.60.0-beta.3",
     "phaser-matter-collision-plugin": "^1.0.0",
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1"
   },
   "devDependencies": {
+    "@types/dotenv-webpack": "^7.0.3",
     "@types/socket.io": "^3.0.2",
     "@types/socket.io-client": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
