@@ -1,6 +1,6 @@
 {
-  "name": "shane-mmo",
-  "version": "3.55.2",
+  "name": "shane-mmo-client",
+  "version": "0.0.1",
   "description": "Phaser 3 starter template with TypeScript and webpack.",
   "homepage": "https://github.com/yandeu/phaser-project-template#readme",
   "main": "index.js",
