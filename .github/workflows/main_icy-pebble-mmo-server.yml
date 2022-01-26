@@ -44,6 +44,7 @@ jobs:
         run: zip release.zip ./* -r
 
       - name: Upload artifact for deployment job
+        working-directory: ./server/dist
         uses: actions/upload-artifact@v2
         with:
           name: icy-pebble-mmo-server
