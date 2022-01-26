@@ -20,13 +20,11 @@ jobs:
         with:
           submodules: true
       
-      - name: Write Environments File
-        uses: DamianReeves/write-file-action@v1.0
-        with:
-            path: ./.env
-            contents: |
-                API_URL=$${{ secrets.SERVER_API_URL }}
-            write-mode: overwrite
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@v1.2
+            envkey_API_URL: $${{ secrets.SERVER_API_URL }}
+            directory: ./client
+            file_name: .env
       
       - name: Client - Dependencies Install
         working-directory: ./client
