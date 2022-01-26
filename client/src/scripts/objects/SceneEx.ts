@@ -1,12 +1,14 @@
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import actorFactory from "../factories/ActorFactory";
 import actorService from "../services/ActorService";
+import {SocketManager} from "../tools/SocketManager";
 import Actor from "./Actors/Actor";
 import Player from "./Player";
 import { findPropertyByName, TiledProperty } from "./TiledHelpers";
 
 export interface SceneHandoffData {
     transitionProperties?: TiledProperty[];
+		socketManager: SocketManager;
 }
 
 export default class SceneEx extends Phaser.Scene {
@@ -16,6 +18,7 @@ export default class SceneEx extends Phaser.Scene {
     player: Player;
     handoffData: SceneHandoffData;
 		actors: Actor[];
+		socketManager: SocketManager;
 
 		constructor(config) {
 			super(config);
@@ -25,6 +28,7 @@ export default class SceneEx extends Phaser.Scene {
 
 		init(data: SceneHandoffData) {
 			this.handoffData = data;
+			this.socketManager = data.socketManager;
 		}
 
 		findPlayerSpawnPoint(spawnId?: number | undefined) : Phaser.Types.Tilemaps.TiledObject {

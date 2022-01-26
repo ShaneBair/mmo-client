@@ -1,4 +1,5 @@
 import { SceneHandoffData } from "../objects/SceneEx";
+import { SocketManager } from "../tools/SocketManager";
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -35,6 +36,8 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   create() {
+		const socketManager = new SocketManager();
+
     const handoffData: SceneHandoffData = {
       transitionProperties: [
         {
@@ -57,7 +60,8 @@ export default class PreloadScene extends Phaser.Scene {
           value: "fade",
           type: "string"
         }
-      ]
+      ],
+			socketManager: socketManager,
     };
     this.scene.start("AutoScene", handoffData);
 

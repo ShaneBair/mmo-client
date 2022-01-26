@@ -22,10 +22,6 @@ const config: Phaser.Types.Core.GameConfig = {
   scene: [ PreloadScene, AutoScene],
   physics: {
     default: 'matter',
-    // arcade: {
-    //   debug: true,
-    //   gravity: { y: 0 }
-    // }
     matter: {
       debug: false,
       gravity:  false,
