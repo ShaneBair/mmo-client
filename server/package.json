@@ -1,6 +1,6 @@
 {
-  "name": "mmo-api",
-  "version": "0.4.3",
+  "name": "shane-mmo-api",
+  "version": "0.0.1",
   "description": "RESTful API service in express/typescript for my game",
   "main": "dist/app.js",
   "scripts": {

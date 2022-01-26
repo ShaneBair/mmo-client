@@ -8,7 +8,7 @@ on:
     branches:
       - main
     paths:
-      - './server/**'
+      - server/**
   workflow_dispatch:
 
 jobs:
@@ -22,6 +22,16 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '16.x'
+          
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@v1.2
+        with:
+            envkey_JWT_SECRET: $${{ secrets.SERVER_JWT_SECRET }}
+            envkey_MONGODB_URI: $${{ secrets.SERVER_MONGODB_URI }}
+            envkey_LOG_LEVEL: $${{ secrets.SERVER_LOG_LEVEL }}
+            envkey_ENDPOINT_PREFIX: $${{ secrets.SERVER_ENDPOINT_PREFIX }}
+            directory: ./server
+            file_name: .env
 
       - name: npm install, build, and test
         working-directory: ./server
