@@ -99,7 +99,8 @@ export default class SceneEx extends Phaser.Scene {
 		if(!scene) return;
 
 		const handoffData: SceneHandoffData = {
-			transitionProperties: object.properties
+			transitionProperties: object.properties,
+			socketManager: this.socketManager,
 		};
 		this.scene.start(scene.value, handoffData);
 	}
