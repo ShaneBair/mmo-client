@@ -31,8 +31,13 @@ jobs:
             envkey_LOG_LEVEL: $${{ secrets.SERVER_LOG_LEVEL }}
             envkey_ENDPOINT_PREFIX: $${{ secrets.SERVER_ENDPOINT_PREFIX }}
             envkey_NODE_ENV: 'production'
-            directory: server
+            directory: ./server
             file_name: .env
+
+      - name: "Check file existence"
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "package.json, .env, server/package.json, server/.env"
 
       - name: npm install, build, and test
         working-directory: ./server
