@@ -34,11 +34,6 @@ jobs:
             directory: ./server
             file_name: .env
 
-      - name: "Check file existence"
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "package.json, .env, server/package.json, server/.env"
-
       - name: npm install, build, and test
         working-directory: ./server
         run: |
