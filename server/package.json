@@ -4,8 +4,8 @@
   "description": "RESTful API service in express/typescript for my game",
   "main": "dist/app.js",
   "scripts": {
-    "start": "node dist/app.js",
-    "build": "tsc -p .",
+    "start": "cross-env NODE_ENV=production node dist/app.js",
+    "build": "cross-env NODE_ENV=production tsc -p .",
     "dev": "nodemon -V --exec ts-node src/app.ts",
     "mongodb": "mkdirp .mongodb && mongod --dbpath .mongodb",
     "lint": "eslint .",

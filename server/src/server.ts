@@ -3,7 +3,7 @@ import express from 'express';
 import Logger from './logger';
 import { Server } from 'http';
 
-const server = async () => {
+const server = async (): Promise<Server> => {
   const app = express();
   let httpServer: Server;
 
