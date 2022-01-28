@@ -1,5 +1,5 @@
 import { Inject, Service } from 'typedi';
-import { MongoRepository, ObjectID } from 'typeorm';
+import { MongoRepository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 import { Logger } from 'winston';
 import CRUD from './CRUD';
