@@ -14,7 +14,7 @@ export class Character {
   @Column()
   @IsString()
   @Index({ unique: true })
-  name?: string;
+  name: string;
 
   @Column()
   @IsNumber()
@@ -47,6 +47,10 @@ export class Character {
   @Column()
   location?: Location;
 
+  @Column()
+  @IsString()
+  playerAssetKey: string;
+
   public constructor(data?: Character) {
     if (data) {
       this.name = data.name;
@@ -59,6 +63,7 @@ export class Character {
       this.mana = data.mana ?? 100;
       this.maxMana = data.maxMana ?? 100;
       this.location = data.location ?? new Location({ mapName: 'DemoScene' });
+      this.playerAssetKey = data.playerAssetKey ?? 'Chara2_1';
     }
   }
 }

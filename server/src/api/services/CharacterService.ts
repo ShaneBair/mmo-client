@@ -33,4 +33,10 @@ export default class CharacterService extends CRUD<Character> {
   async findByCharacter(characterId: string): Promise<Character> {
     return this.findOne(characterId);
   }
+
+  async findRandomCharacter(): Promise<Character> {
+    const characters = await this.find();
+
+    return characters[Math.floor(Math.random() * characters.length)];
+  }
 }

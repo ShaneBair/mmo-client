@@ -3,10 +3,20 @@ import { Server, createServer } from 'http';
 import { Server as socketServer } from 'socket.io';
 import { useSocketServer } from 'socket-controllers';
 import PlayerSocketController from '../socket-controllers/PlayerSocketController';
+import { Container } from 'typedi';
+import Logger from '../logger';
 
 export default (app: Application): Server => {
+  Container.set('logger', Logger);
+
+  Logger.debug('Cors Origin: ' + process.env.CORS_ORIGINS);
   const httpServer = createServer(app);
-  const io = new socketServer(httpServer);
+  const io = new socketServer(httpServer, {
+    perMessageDeflate: false,
+    cors: {
+      origin: process.env.CORS_ORIGINS,
+    },
+  });
 
   // io.use((socket: any, next: any) => {
   //   console.log('custom middleware');

@@ -56,6 +56,7 @@ route.post(
   celebrate({
     body: Joi.object({
       name: Joi.string().required(),
+      playerAssetKey: Joi.string().required(),
     }),
   }),
   async (req, res, next) => {
@@ -103,6 +104,7 @@ route.put(
       maxHealth: Joi.number().optional(),
       mana: Joi.number().optional(),
       maxMana: Joi.number().optional(),
+      playerAssetKey: Joi.string().optional(),
     }),
   }),
   async (req, res, next) => {
