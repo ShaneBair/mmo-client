@@ -1,4 +1,3 @@
-import Player from "../scripts/objects/Player";
 import { ActorInfo, ActorType } from "./actorDatabase";
 
 export class PlayerInfo extends ActorInfo {

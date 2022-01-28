@@ -49,12 +49,14 @@ export class ActorInfo {
 	}
 
 	getAnimationByKey(animationKey: string): AnimationInfo | undefined {
+		let result;
+
 		this.animations.forEach(animation => {
 			if(animation.key === animationKey)
-				return animation;
+				result = animation;
 		})
 
-		return undefined;
+		return result;
 	}
 }
 
