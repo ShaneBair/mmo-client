@@ -13,6 +13,7 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
 
     "moduleResolution": "node",
     "lib": ["dom", "esnext"]
