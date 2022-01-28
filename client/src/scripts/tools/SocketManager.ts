@@ -7,6 +7,7 @@ export class SocketManager {
 
 	constructor() {
 		const apiHost = process.env.API_URL as string;
+		console.log(`SocketManager:constructor - apiHost = ${apiHost}`);
 		this.socket = io(apiHost);
 	}
 }
