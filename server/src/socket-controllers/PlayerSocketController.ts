@@ -13,6 +13,7 @@ import Logger from '../logger';
 import { Container } from 'typedi';
 import GameState from '../game/GameState';
 import PlayerState from '../game/PlayerState';
+import { EventType } from './EventType';
 
 @SocketController()
 export default class PlayerSocketController {
@@ -27,7 +28,7 @@ export default class PlayerSocketController {
   @OnConnect()
   async connection(@ConnectedSocket() socket: any, @SocketId() id: string) {
     Logger.debug('client connected:' + id);
-    socket.broadcast.emit('player:new');
+    socket.broadcast.emit(EventType.PLAYER_NEW);
   }
 
   @OnDisconnect()
@@ -45,8 +46,8 @@ export default class PlayerSocketController {
     socket.emit('message_saved', message);
   }
 
-  @OnMessage('player:load_character')
-  @EmitOnSuccess('player:character_loaded')
+  @OnMessage(EventType.CHARACTER_LOAD)
+  @EmitOnSuccess(EventType.CHARACTER_LOADED)
   async loadCharacter(
     @ConnectedSocket() socket: any,
     @SocketId() id: string,
@@ -62,8 +63,8 @@ export default class PlayerSocketController {
     return character;
   }
 
-  @OnMessage('player:unload_character')
-  @EmitOnSuccess('player:character_unloaded')
+  @OnMessage(EventType.CHARACTER_UNLOAD)
+  @EmitOnSuccess(EventType.CHARACTER_UNLOADED)
   async unloadCharacter(
     @ConnectedSocket() socket: any,
     @SocketId() id: string,

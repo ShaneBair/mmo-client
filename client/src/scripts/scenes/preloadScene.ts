@@ -1,5 +1,5 @@
 import { SceneHandoffData } from "../objects/SceneEx";
-import socketManager from "../tools/SocketManager";
+import socketManager, {EventType} from "../tools/SocketManager";
 import mapService from "../services/MapService";
 import {Character as CharacterEntity} from "../../../../server/src/entities/Character";
 
@@ -24,7 +24,7 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-		socketManager.socket.on('player:character_loaded', (character: CharacterEntity) => {
+		socketManager.socket.on(EventType.CHARACTER_LOADED, (character: CharacterEntity) => {
 			console.log(character);
 			socketManager.character = character;
 
@@ -60,7 +60,7 @@ export default class PreloadScene extends Phaser.Scene {
 			this.scene.start("AutoScene", handoffData);
 		});
 
-		socketManager.socket.emit("player:load_character");
+		socketManager.socket.emit(EventType.CHARACTER_LOAD);
     
 
     /**

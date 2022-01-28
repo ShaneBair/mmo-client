@@ -20,6 +20,7 @@ export default class SceneEx extends Phaser.Scene {
     player: Player;
     handoffData: SceneHandoffData;
 		actors: Actor[];
+		otherPlayers: Actor[];
 		socketManager: SocketManager;
 		spritesheetService: SpritesheetService;
 
@@ -27,6 +28,7 @@ export default class SceneEx extends Phaser.Scene {
 			super(config);
 
 			this.actors = [];
+			this.otherPlayers = [];
 			this.spritesheetService = spritesheetServiceInstance;
 		}
 
@@ -82,7 +84,7 @@ export default class SceneEx extends Phaser.Scene {
 			});
 		});
 	}
-	
+
 	createActors() {
 		const objectLayer = this.map.getObjectLayer("Actors");
 
@@ -128,6 +130,7 @@ export default class SceneEx extends Phaser.Scene {
 		const z = findPropertyByName(spawnLayer.properties as unknown as TiledProperty[], "depth")?.value ?? 0;
 
 		this.player = new Player(this, this.socketManager.character, x, y, z);
+		this.socketManager.updateMapForPlayer(findPropertyByName(this.handoffData.transitionProperties, "map")?.value)
 	}
 
 	createMapTileLayers() {
