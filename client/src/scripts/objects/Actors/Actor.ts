@@ -31,7 +31,7 @@ export default class Actor {
 		const matter = this.scene.matter;
 		const actorInfo = this.actorInfo;
 
-		this.sprite = matter.add.sprite(spawnCoords.x, spawnCoords.y, actorInfo.spritesheetKey, actorInfo.defaultFrame).setZ(spawnCoords.z).setDepth(spawnCoords.z);
+		this.sprite = matter.add.sprite(spawnCoords.x, spawnCoords.y, actorInfo.primarySpritesheetKey, actorInfo.defaultFrame).setZ(spawnCoords.z).setDepth(spawnCoords.z);
 
 		if(actorInfo.customShapes) {
 			const bodyParts: MatterJS.BodyType[] = [];
@@ -115,7 +115,7 @@ export default class Actor {
 			const thisAnimation: Phaser.Types.Animations.Animation = {
 				...animation,
 				key: `${this.actorInfo.key}-${animation.key}`,
-				frames: anims.generateFrameNumbers(this.actorInfo.spritesheetKey, {
+				frames: anims.generateFrameNumbers(this.actorInfo.primarySpritesheetKey, {
 					frames: animation.frames
 				}),
 			};
@@ -125,7 +125,7 @@ export default class Actor {
 	}
 
 	update(time: number) {
-		console.log('actor update');
+		//console.log('actor update');
 	}
 
 	destroy() {

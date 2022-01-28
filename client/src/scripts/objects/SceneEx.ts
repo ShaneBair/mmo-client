@@ -112,7 +112,7 @@ export default class SceneEx extends Phaser.Scene {
 		const { x, y } = this.findPlayerSpawnPoint(toSpawnIdProperty?.value);
 		const z = findPropertyByName(spawnLayer.properties as unknown as TiledProperty[], "depth")?.value ?? 0;
 
-		this.player = new Player(this, x, y, z);
+		this.player = new Player(this, this.socketManager.character, x, y, z);
 	}
 
 	createMapTileLayers() {

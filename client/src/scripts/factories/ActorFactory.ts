@@ -12,7 +12,7 @@ class ActorFactory {
 
 		let actor: Actor;
 
-		const actorInfo = actorService.getActorByKey(createPoint.name);
+		const actorInfo = actorService.getByKey(createPoint.name);
 		const spawnPoint: Coordinates = {
 			x: createPoint.x,
 			y: createPoint.y,

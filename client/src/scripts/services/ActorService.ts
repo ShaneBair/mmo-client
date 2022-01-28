@@ -2,8 +2,8 @@ import actorDB, { ActorInfo } from "../../data/actorDatabase";
 
 export class ActorService {
     
-    getActorByKey(key: string): ActorInfo {
-      return { ...actorDB[key]};
+    getByKey(key: string): ActorInfo {
+      return new ActorInfo({ ...actorDB[key]});
     }
 }
 

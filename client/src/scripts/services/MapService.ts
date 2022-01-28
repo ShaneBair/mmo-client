@@ -2,7 +2,7 @@ import mapDB, { MapInfo } from "../../data/mapDatabase";
 
 export class MapService {
     
-    getMapByKey(key: string): MapInfo {
+    getByKey(key: string): MapInfo {
         return mapDB[key];
     }
 }

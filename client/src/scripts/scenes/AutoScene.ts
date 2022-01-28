@@ -2,6 +2,8 @@ import { findPropertyByName } from "../objects/TiledHelpers";
 import SceneEx from "../objects/SceneEx";
 import mapService from "../services/MapService";
 import tilesetService from "../services/TilesetService";
+import playerService from "../services/PlayerService";
+import spritesheetService from "../services/SpritesheetService";
 
 export default class AutoScene extends SceneEx {
 	constructor() {
@@ -10,7 +12,7 @@ export default class AutoScene extends SceneEx {
 
 	preload() {
 		const mapKey = findPropertyByName(this.handoffData.transitionProperties, "map");
-		const mapData = mapService.getMapByKey(mapKey?.value);
+		const mapData = mapService.getByKey(mapKey?.value);
 
 		this.load.tilemapTiledJSON(mapData.key, mapData.path);
 	}
@@ -22,8 +24,19 @@ export default class AutoScene extends SceneEx {
 		this.map = this.make.tilemap({ key: mapKey?.value});
 
 		this.map.tilesets.forEach(tileset => {
-			loader.image(tileset.name, tilesetService.getTilesetByKey(tileset.name).path);
+			loader.image(tileset.name, tilesetService.getByKey(tileset.name).path);
 		});
+
+		const playerInfo = playerService.getByKey(this.socketManager.character.playerAssetKey);
+		playerInfo.spritesheetKeys.forEach(spritesheetKey => {
+			const spritesheetInfo = spritesheetService.getByKey(spritesheetKey);
+
+			loader.spritesheet(spritesheetInfo.key, spritesheetInfo.path, {
+				frameWidth: spritesheetInfo.frameWidth,
+				frameHeight: spritesheetInfo.frameHeight		
+			});
+		});
+		//playerInfo.
 
 		loader.once(Phaser.Loader.Events.COMPLETE, () => {
 			this.createScene();

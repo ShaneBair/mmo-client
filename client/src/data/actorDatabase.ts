@@ -18,13 +18,14 @@ export interface AnimationInfo {
 	frames: number[];
 	frameRate: number;
 	repeat: number;
+	spritesheetKey: string;
 }
 
-export interface ActorInfo {
+export class ActorInfo {
 	key: string;
 	type: ActorType;
-	spritesheetKey: string;
-	spritesheetPath: string;
+	spritesheetKeys: string[];
+	primarySpritesheetKey: string;
 	defaultFrame: number;
 	animations: AnimationInfo[];
 	customShapes?: ShapeInfo[];
@@ -33,7 +34,28 @@ export interface ActorInfo {
 		walkSpeed?: number,
 		changeDirectionFrequency?: number,
 		tendency: number,
-	},
+	};
+
+	constructor(info: Partial<ActorInfo>) {
+		this.key = info.key ?? '';
+		this.type = info.type ?? ActorType.Actor;
+		this.spritesheetKeys = info.spritesheetKeys ?? [];
+		this.primarySpritesheetKey = info.primarySpritesheetKey ?? '';
+		this.defaultFrame = info.defaultFrame ?? 1;
+		this.animations = info.animations ?? [];
+		this.customShapes = info.customShapes ?? undefined;
+		this.spriteRenderOptions = info.spriteRenderOptions ?? undefined;
+		this.movement = info.movement ?? undefined;
+	}
+
+	getAnimationByKey(animationKey: string): AnimationInfo | undefined {
+		this.animations.forEach(animation => {
+			if(animation.key === animationKey)
+				return animation;
+		})
+
+		return undefined;
+	}
 }
 
 export enum ActorType {
@@ -41,15 +63,16 @@ export enum ActorType {
 	NPC,
 	Enemy,
 	Animal,
-	Predator
+	Predator,
+	Player
 }
 
 const actorDB: Record<string, ActorInfo> = {
-	BrownRabbit: {
+	BrownRabbit: new ActorInfo({
 		key: "BrownRabbit",
-		spritesheetKey: "animals2",
-		spritesheetPath: "assets/img/spritesheets/animals2.png",
+		spritesheetKeys: [ 'animals2' ],
 		type: ActorType.Animal,
+		primarySpritesheetKey: 'animals2',
 		defaultFrame: 19,
 		movement: {
 			walkSpeed: 3,
@@ -61,25 +84,29 @@ const actorDB: Record<string, ActorInfo> = {
 				key: 'down',
 				frames: [6, 7, 8],
 				frameRate: 10,
-				repeat: -1
+				repeat: -1,
+				spritesheetKey: 'animals2',
 			},
 			{
 				key: 'left',
 				frames: [18, 19, 20],
 				frameRate: 10,
-				repeat: -1
+				repeat: -1,
+				spritesheetKey: 'animals2',
 			},
 			{
 				key: 'right',
 				frames: [30, 31, 32],
 				frameRate: 10,
-				repeat: -1
+				repeat: -1,
+				spritesheetKey: 'animals2',
 			},
 			{
 				key: 'up',
 				frames: [42, 43, 44],
 				frameRate: 10,
-				repeat: -1
+				repeat: -1,
+				spritesheetKey: 'animals2',
 			}
 		],
 		customShapes: [
@@ -101,12 +128,12 @@ const actorDB: Record<string, ActorInfo> = {
 			xOffset: 0.05,
 			yOffset: 0.3
 		}
-	},
-	GreySquirrel: {
+	}),
+	GreySquirrel: new ActorInfo({
 		key: "GreySquirrel",
-		spritesheetKey: "animals2",
-		spritesheetPath: "assets/img/spritesheets/animals2.png",
+		spritesheetKeys: [ 'animals2' ],
 		type: ActorType.Animal,
+		primarySpritesheetKey: 'animals2',
 		defaultFrame: 1,
 		movement: {
 			walkSpeed: 2,
@@ -118,25 +145,29 @@ const actorDB: Record<string, ActorInfo> = {
 				key: 'down',
 				frames: [0, 1, 2],
 				frameRate: 10,
-				repeat: -1
+				repeat: -1,
+				spritesheetKey: 'animals2',
 			},
 			{
 				key: 'left',
 				frames: [12, 13, 14],
 				frameRate: 10,
-				repeat: -1
+				repeat: -1,
+				spritesheetKey: 'animals2',
 			},
 			{
 				key: 'right',
 				frames: [24, 25, 26],
 				frameRate: 10,
-				repeat: -1
+				repeat: -1,
+				spritesheetKey: 'animals2',
 			},
 			{
 				key: 'up',
 				frames: [36, 37, 38],
 				frameRate: 10,
-				repeat: -1
+				repeat: -1,
+				spritesheetKey: 'animals2',
 			}
 		],
 		customShapes: [
@@ -158,64 +189,7 @@ const actorDB: Record<string, ActorInfo> = {
 			xOffset: 0.0,
 			yOffset: 0.3
 		}
-	},
-	ArmedCitizen: {
-		key: "ArmedCitizen",
-		spritesheetKey: "ArmedCitizen",
-		spritesheetPath: "assets/img/spritesheets/ulpc-sheet-test-36x36.png",
-		type: ActorType.Animal,
-		defaultFrame: 17,
-		movement: {
-			walkSpeed: 3,
-			changeDirectionFrequency: 300,
-			tendency: 20,
-		},
-		animations: [
-			{
-				key: 'down',
-				frames: [17, 18, 19, 20, 21, 22, 23, 24, 25],
-				frameRate: 10,
-				repeat: -1
-			},
-			{
-				key: 'left',
-				frames: [8, 9, 10, 11, 12, 13, 14, 15, 16],
-				frameRate: 10,
-				repeat: -1
-			},
-			{
-				key: 'right',
-				frames: [26, 27, 28, 29, 30, 31, 32, 33, 34],
-				frameRate: 10,
-				repeat: -1
-			},
-			{
-				key: 'up',
-				frames: [0, 1, 2, 3, 4, 5, 6, 7],
-				frameRate: 10,
-				repeat: -1
-			}
-		],
-		customShapes: [
-			{
-				shape: ShapeType.Rectangle,
-				shapeInfo: {
-					x: 0,
-					y: 0,
-					width: 30,
-					height: 36,
-					config: { 
-						isSensor: false,
-						label: "ArmedCitizen"
-					}
-				},
-			}
-		],
-		spriteRenderOptions: {
-			xOffset: 0.05,
-			yOffset: 0.3
-		}
-	}
+	}),
 };
 
 export default actorDB;

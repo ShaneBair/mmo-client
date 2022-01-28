@@ -1,5 +1,7 @@
 import { SceneHandoffData } from "../objects/SceneEx";
-import { SocketManager } from "../tools/SocketManager";
+import socketManager from "../tools/SocketManager";
+import mapService from "../services/MapService";
+import {Character as CharacterEntity} from "../../../../server/src/entities/Character";
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -15,55 +17,51 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image('water', 'assets/map/tiles/water.png');
     this.load.image('inside', 'assets/map/tiles/inside.png');
 
-		this.load.spritesheet("chara2", 'assets/img/spritesheets/chara2.png', {
-			frameWidth: 26,
-			frameHeight: 36,
-		});
-		this.load.spritesheet("chara2_1_attacks", 'assets/img/spritesheets/chara2_1_attacks.png', {
-			frameWidth: 48,
-			frameHeight: 36
-		})
-
 		this.load.spritesheet("animals2", 'assets/img/spritesheets/animals2.png', {
 			frameWidth: 42,
 			frameHeight: 36		
 		});
-
-		this.load.spritesheet("ArmedCitizen", 'assets/img/spritesheets/ulpc-sheet-test-36x36.png', {
-			frameWidth: 36,
-			frameHeight: 36,
-		})
   }
 
   create() {
-		const socketManager = new SocketManager();
+		socketManager.socket.on('player:character_loaded', (character: CharacterEntity) => {
+			console.log(character);
+			socketManager.character = character;
 
-    const handoffData: SceneHandoffData = {
-      transitionProperties: [
-        {
-          name: "scene",
-          value: "AutoScene",
-          type: "string"
-        },
-        {
-          name: "map",
-          value: "DemoScene",
-          type: "string"
-        },
-        {
-          name: "type",
-          value: "transition",
-          type: "string"
-        },
-        {
-          name: "transitionEffect",
-          value: "fade",
-          type: "string"
-        }
-      ],
-			socketManager: socketManager,
-    };
-    this.scene.start("AutoScene", handoffData);
+			if(character?.location?.mapName === undefined) return;
+
+			const mapInfo = mapService.getByKey(character.location.mapName);
+
+			const handoffData: SceneHandoffData = {
+				transitionProperties: [
+					{
+						name: "scene",
+						value: mapInfo?.key ? "AutoScene" : character.location.mapName,
+						type: "string"
+					},
+					{
+						name: "map",
+						value: mapInfo?.key,
+						type: "string"
+					},
+					{
+						name: "type",
+						value: "transition",
+						type: "string"
+					},
+					{
+						name: "transitionEffect",
+						value: "fade",
+						type: "string"
+					}
+				],
+				socketManager: socketManager,
+			};
+			this.scene.start("AutoScene", handoffData);
+		});
+
+		socketManager.socket.emit("player:load_character");
+    
 
     /**
      * This is how you would dynamically import the mainScene class (with code splitting),

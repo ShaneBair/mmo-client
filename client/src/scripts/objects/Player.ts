@@ -1,7 +1,10 @@
 import Phaser from "phaser";
+import { Character as CharacterEntity } from "../../../../server/src/entities/Character";
 import MultiKey from "../tools/MultiKey";
 import SceneEx from "./SceneEx";
 import { Directions } from "./types";
+import playerService from "../services/PlayerService";
+import { PlayerInfo } from "../../data/playerDatabase";
 
 export default class Player {
   scene: Phaser.Scene;
@@ -28,8 +31,9 @@ export default class Player {
     destroyed: boolean;
   };
   walkingSpeed: number;
+	playerInfo: PlayerInfo;
 
-  constructor(scene: Phaser.Scene, x: number | undefined, y: number | undefined, z: number) {
+  constructor(scene: Phaser.Scene, character: CharacterEntity, x: number | undefined, y: number | undefined, z: number) {
     this.scene = scene;
     this.state = {
       isTouching: {
@@ -41,6 +45,8 @@ export default class Player {
       destroyed: false,
     };
     this.walkingSpeed = 3;
+
+		this.playerInfo = playerService.getByKey(character.playerAssetKey);
 
     this.createAnimations();
     this.createPlayer(x, y, z);
@@ -134,19 +140,19 @@ export default class Player {
 			switch(this.state.facing) {
 				case Directions.W:
 					animation = "left",
-					frame = 13
+					frame = this.playerInfo.getAnimationByKey('left')?.frames[1] ?? 0
 					break;
 				case Directions.E:
 					animation = "right",
-					frame = 25
+					frame = this.playerInfo.getAnimationByKey('right')?.frames[1] ?? 0
 					break;
 				case Directions.N:
 					animation = "up",
-					frame = 37
+					frame = this.playerInfo.getAnimationByKey('up')?.frames[1] ?? 0
 					break;
 				case Directions.S:
 					animation = "down",
-					frame = 1
+					frame = this.playerInfo.getAnimationByKey('down')?.frames[1] ?? 0
 					break;
 			}
 
@@ -157,7 +163,7 @@ export default class Player {
   }
 
   createPlayer(x: number | undefined, y: number | undefined, z: number) {
-    this.sprite = this.scene.matter.add.sprite(0, 0, "chara2", 1).setZ(z).setDepth(z);
+    this.sprite = this.scene.matter.add.sprite(0, 0, this.playerInfo.primarySpritesheetKey, this.playerInfo.defaultFrame).setZ(z).setDepth(z);
 
     const { width: w, height: h } = this.sprite;
     const mainBody = this.scene.matter.bodies.rectangle(0, h * 0.05, w * 0.6, h * 0.8, {chamfer: {radius: 10}, isSensor: false, label: "Player Main"});
@@ -187,75 +193,21 @@ export default class Player {
     });
   }
 
-  createAnimations() {
-    const anims = this.scene.anims;
+	createAnimations() {
+		const anims = this.scene.anims;
 
-    const leftAnimation: Phaser.Types.Animations.Animation = {
-      key: 'left',
-      frames: anims.generateFrameNumbers('chara2', {
-        frames: [12, 13, 14]
-      }),
-      frameRate: 10,
-      repeat: -1
-    };
-    const rightAnimation: Phaser.Types.Animations.Animation = {
-      key: 'right',
-      frames: anims.generateFrameNumbers('chara2', {
-        frames: [24, 25, 26]
-      }),
-      frameRate: 10,
-      repeat: -1
-    };
-    const upAnimation: Phaser.Types.Animations.Animation = {
-      key: 'up',
-      frames: anims.generateFrameNumbers('chara2', {
-        frames: [36, 37, 38]
-      }),
-      frameRate: 10,
-      repeat: -1
-    };
-    const downAnimation: Phaser.Types.Animations.Animation = {
-      key: 'down',
-      frames: anims.generateFrameNumbers('chara2', {
-        frames: [0, 1, 2]
-      }),
-      frameRate: 10,
-      repeat: -1
-    };
-		const attackAnimation: Phaser.Types.Animations.Animation = {
-			key: 'attack',
-			frames: anims.generateFrameNumbers('chara2_1_attacks', {
-				frames: [3, 4, 5]
-			}),
-			frameRate: 10,
-			repeat: -1,
-		};
-		const upAttackAnimation: Phaser.Types.Animations.Animation = {
-			key: 'upAttack',
-			frames: anims.generateFrameNumbers('chara2_1_attacks', {
-				//frames: [54, 55, 56] // Gotta re-edit spritesheets in bulk to add up create attack
-				frames: [30, 31, 32]
-			}),
-			frameRate: 10,
-			repeat: -1,
-		};
-		const downAttackAnimation: Phaser.Types.Animations.Animation = {
-			key: 'downAttack',
-			frames: anims.generateFrameNumbers('chara2_1_attacks', {
-				frames: [30, 31, 32]
-			}),
-			frameRate: 10,
-			repeat: -1,
-		};
-
-    anims.create(leftAnimation);
-    anims.create(rightAnimation);
-    anims.create(upAnimation);
-    anims.create(downAnimation);
-		anims.create(attackAnimation);
-		anims.create(upAttackAnimation);
-		anims.create(downAttackAnimation);
-  }
+		this.playerInfo.animations.forEach(animation => {
+			const thisAnimation: Phaser.Types.Animations.Animation = {
+				...animation,
+				key: `${animation.key}`,
+				frames: anims.generateFrameNumbers(animation.spritesheetKey, {
+					frames: animation.frames
+				}),
+			};
+	
+			anims.create(thisAnimation);
+		});	
+	}
 
   createControls() {
     const { LEFT, RIGHT, UP, DOWN, A, S, D, W, SPACE } = Phaser.Input.Keyboard.KeyCodes;
