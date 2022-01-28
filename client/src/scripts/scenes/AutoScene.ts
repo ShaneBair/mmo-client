@@ -3,7 +3,6 @@ import SceneEx from "../objects/SceneEx";
 import mapService from "../services/MapService";
 import tilesetService from "../services/TilesetService";
 import playerService from "../services/PlayerService";
-import spritesheetService from "../services/SpritesheetService";
 
 export default class AutoScene extends SceneEx {
 	constructor() {
@@ -27,16 +26,9 @@ export default class AutoScene extends SceneEx {
 			loader.image(tileset.name, tilesetService.getByKey(tileset.name).path);
 		});
 
+		
 		const playerInfo = playerService.getByKey(this.socketManager.character.playerAssetKey);
-		playerInfo.spritesheetKeys.forEach(spritesheetKey => {
-			const spritesheetInfo = spritesheetService.getByKey(spritesheetKey);
-
-			loader.spritesheet(spritesheetInfo.key, spritesheetInfo.path, {
-				frameWidth: spritesheetInfo.frameWidth,
-				frameHeight: spritesheetInfo.frameHeight		
-			});
-		});
-		//playerInfo.
+		this.loadActorSpritesheets(loader, playerInfo);
 
 		loader.once(Phaser.Loader.Events.COMPLETE, () => {
 			this.createScene();

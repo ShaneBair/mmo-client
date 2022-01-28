@@ -1,10 +1,12 @@
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
+import { ActorInfo } from "../../data/actorDatabase";
 import actorFactory from "../factories/ActorFactory";
 import actorService from "../services/ActorService";
 import {SocketManager} from "../tools/SocketManager";
 import Actor from "./Actors/Actor";
 import Player from "./Player";
 import { findPropertyByName, TiledProperty } from "./TiledHelpers";
+import spritesheetServiceInstance, { SpritesheetService } from "../services/SpritesheetService";
 
 export interface SceneHandoffData {
     transitionProperties?: TiledProperty[];
@@ -19,11 +21,13 @@ export default class SceneEx extends Phaser.Scene {
     handoffData: SceneHandoffData;
 		actors: Actor[];
 		socketManager: SocketManager;
+		spritesheetService: SpritesheetService;
 
 		constructor(config) {
 			super(config);
 
 			this.actors = [];
+			this.spritesheetService = spritesheetServiceInstance;
 		}
 
 		init(data: SceneHandoffData) {
@@ -68,6 +72,17 @@ export default class SceneEx extends Phaser.Scene {
 		});
 	}
 
+	loadActorSpritesheets(loader: Phaser.Loader.LoaderPlugin, actor: ActorInfo): void {
+		actor.spritesheetKeys.forEach(spritesheetKey => {
+			const spritesheetInfo = this.spritesheetService.getByKey(spritesheetKey);
+
+			loader.spritesheet(spritesheetInfo.key, spritesheetInfo.path, {
+				frameWidth: spritesheetInfo.frameWidth,
+				frameHeight: spritesheetInfo.frameHeight		
+			});
+		});
+	}
+	
 	createActors() {
 		const objectLayer = this.map.getObjectLayer("Actors");
 

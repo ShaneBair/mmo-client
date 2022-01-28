@@ -11,13 +11,17 @@ import {
 import CharacterService from '../api/services/CharacterService';
 import Logger from '../logger';
 import { Container } from 'typedi';
+import GameState from '../game/GameState';
+import PlayerState from '../game/PlayerState';
 
 @SocketController()
 export default class PlayerSocketController {
   characterService: CharacterService;
+  gameState: GameState;
 
   constructor() {
     this.characterService = Container.get(CharacterService);
+    this.gameState = Container.get(GameState);
   }
 
   @OnConnect()
@@ -29,6 +33,8 @@ export default class PlayerSocketController {
   @OnDisconnect()
   disconnect(@ConnectedSocket() socket: any, @SocketId() id: string) {
     Logger.debug('client disconnected:' + id);
+
+    this.unloadCharacter(socket, id);
   }
 
   @OnMessage('save')
@@ -43,6 +49,7 @@ export default class PlayerSocketController {
   @EmitOnSuccess('player:character_loaded')
   async loadCharacter(
     @ConnectedSocket() socket: any,
+    @SocketId() id: string,
     @MessageBody() message: any
   ) {
     Logger.debug(`loadCharacter`, message);
@@ -50,6 +57,20 @@ export default class PlayerSocketController {
     // Obviously this is not desirable and POC
     const character = await this.characterService.findRandomCharacter();
 
+    this.gameState.addPlayer(new PlayerState(character, id));
+
     return character;
+  }
+
+  @OnMessage('player:unload_character')
+  @EmitOnSuccess('player:character_unloaded')
+  async unloadCharacter(
+    @ConnectedSocket() socket: any,
+    @SocketId() id: string,
+    @MessageBody() message?: any
+  ) {
+    Logger.debug(`unloadCharacter`, message);
+
+    this.gameState.removePlayer(id);
   }
 }
