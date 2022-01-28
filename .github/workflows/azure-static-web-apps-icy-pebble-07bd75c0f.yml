@@ -24,6 +24,10 @@ jobs:
             envkey_API_URL: $${{ secrets.SERVER_API_URL }}
             directory: ./client
             file_name: .env
+            
+      - name: Server - Dependencies Install
+        working-directory: ./server
+        run: npm install --force
       
       - name: Client - Dependencies Install
         working-directory: ./client
