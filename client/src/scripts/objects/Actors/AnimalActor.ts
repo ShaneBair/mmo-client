@@ -1,6 +1,15 @@
+import { ActorInfo } from "../../../data/actorDatabase";
+import SceneEx from "../SceneEx";
+import { Coordinates } from "../types";
 import Actor from "./Actor";
 
 export default class AnimalActor extends Actor {
+	constructor(scene: SceneEx, spawnCoords: Coordinates, actorInfo: ActorInfo) {
+		super(scene, spawnCoords, actorInfo);
+
+		this.create(spawnCoords);
+  }
+
 	update(time: number) {
 		if(this.actorInfo.movement?.walkSpeed === undefined) return;
 

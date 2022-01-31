@@ -66,7 +66,8 @@ export enum ActorType {
 	Enemy,
 	Animal,
 	Predator,
-	Player
+	Player,
+	CurrentPlayer
 }
 
 const actorDB: Record<string, ActorInfo> = {

@@ -1,5 +1,5 @@
 import { CollidingObject, EventData } from "phaser-matter-collision-plugin";
-import { ActorInfo, ShapeInfo, ShapeType } from "../../../data/actorDatabase";
+import { ActorInfo, ActorType, ShapeInfo, ShapeType } from "../../../data/actorDatabase";
 import SceneEx from "../SceneEx";
 import { Coordinates, Guid } from "../types";
 
@@ -17,17 +17,23 @@ export default class Actor {
 		this.sensors = [];
 		this.lastMovementStart = 1;
 
-    this.createAnimations();
-    this.createActor(spawnCoords);
-
     this.scene.events.on("update", this.update, this);
     this.scene.events.once("shutdown", this.destroy, this);
     this.scene.events.once("destroy", this.destroy, this);
 
 		this.guid = Guid.newGuid();
+
+		if(this.actorInfo.type === ActorType.Actor) {
+			this.create(spawnCoords);
+		}
   }
 
-	createActor(spawnCoords: Coordinates) {
+	create(spawnCoords: Coordinates) {
+		this.createAnimations();
+		this.createSprite(spawnCoords);
+	}
+
+	createSprite(spawnCoords: Coordinates) {
 		const matter = this.scene.matter;
 		const actorInfo = this.actorInfo;
 
@@ -69,12 +75,14 @@ export default class Actor {
     });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	onSensorsCollideWithPlayer(eventData: EventData<MatterJS.BodyType, CollidingObject>) {
 		//this.destroy();
 		// this.sprite.setVelocity(0);
 		// this.scene.player.sprite.setVelocity(0);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	onSensorCollide(eventData: EventData<MatterJS.BodyType, CollidingObject>) {
     // console.log(`${this.actorInfo.key} hit something!`);
 		// console.log(eventData.bodyA);
@@ -124,6 +132,7 @@ export default class Actor {
 		});	
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	update(time: number) {
 		//console.log('actor update');
 	}
@@ -133,7 +142,13 @@ export default class Actor {
     this.scene.events.off("update", this.update, this);
     this.scene.events.off("shutdown", this.destroy, this);
     this.scene.events.off("destroy", this.destroy, this);
-		this.scene.removeActor(this.guid);
     this.sprite.destroy();
+
+		switch(this.actorInfo.type) {
+			case ActorType.Actor:
+			default:
+				this.scene.removeActor(this.guid);
+				break;
+		}
 	}
 }

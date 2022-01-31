@@ -6,6 +6,7 @@ import PlayerSocketController from '../socket-controllers/PlayerSocketController
 import { Container } from 'typedi';
 import Logger from '../logger';
 import MapSocketController from '../socket-controllers/MapSocketController';
+import GameSocketController from '../socket-controllers/GameSocketController';
 
 export default (app: Application): Server => {
   Container.set('logger', Logger);
@@ -25,7 +26,11 @@ export default (app: Application): Server => {
   // });
 
   useSocketServer(io, {
-    controllers: [PlayerSocketController, MapSocketController],
+    controllers: [
+      PlayerSocketController,
+      MapSocketController,
+      GameSocketController,
+    ],
   });
 
   return httpServer;

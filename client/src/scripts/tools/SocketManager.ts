@@ -1,5 +1,6 @@
 import { io, Socket } from 'socket.io-client';
-import {Character as CharacterEntity} from "../../../../server/src/entities/Character";
+import { Character as CharacterEntity } from "../../../../server/src/entities/Character";
+import { PlayerStateAction, SocketRequest } from "../../../../server/src/socket-controllers/SocketSupport";
 
 export enum EventType {
   PLAYER_NEW = 'player:new',
@@ -8,8 +9,15 @@ export enum EventType {
   CHARACTER_UNLOAD = 'player:unload_character',
   CHARACTER_UNLOADED = 'player:character_unloaded',
 	JOIN_MAP = 'player:join_map',
+	PLAYER_STATE_UPDATE = 'player:state_update',
+  PLAYER_STATE_UPDATED = 'player:stated_updated',
 
 	SOCKET_NOT_FOUND = 'connection:socket_404',
+}
+
+export enum SocketActionTypes {
+  Generic = '',
+  PlayerState = 'PlayerState',
 }
 
 export class SocketManager {
@@ -24,6 +32,14 @@ export class SocketManager {
 
 	updateMapForPlayer(mapName: string | undefined) {
 		this.socket.emit(EventType.JOIN_MAP, { data: mapName});
+	}
+
+	sendPlayerState(stateUpdate: PlayerStateAction) {
+		const request: SocketRequest = {
+			data: stateUpdate,
+			type: SocketActionTypes.PlayerState,
+		}
+		this.socket.emit(EventType.PLAYER_STATE_UPDATE, request);
 	}
 }
 

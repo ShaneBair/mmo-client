@@ -1,14 +1,11 @@
-import Phaser, { Scene } from "phaser";
+import Phaser from "phaser";
 import { Character as CharacterEntity } from "../../../../server/src/entities/Character";
 import MultiKey from "../tools/MultiKey";
 import SceneEx from "./SceneEx";
-import { Directions } from "./types";
-import playerService from "../services/PlayerService";
-import { PlayerInfo } from "../../data/playerDatabase";
+import { Coordinates, Directions } from "./types";
+import PlayerActor from "./Actors/PlayerActor";
 
-export default class Player {
-  scene: SceneEx;
-  sprite: Phaser.Physics.Matter.Sprite;
+export default class Player extends PlayerActor {
   keys: {
     up: MultiKey,
     down: MultiKey,
@@ -16,7 +13,7 @@ export default class Player {
     right: MultiKey,
 		attack: MultiKey,
   };
-  sensors: { 
+  playerSensors: { 
     bottom: MatterJS.BodyType; 
     left: MatterJS.BodyType; 
     right: MatterJS.BodyType; 
@@ -28,14 +25,14 @@ export default class Player {
       bottom: boolean;
     },
 		facing: Directions,
+		attacking: boolean;
     destroyed: boolean;
 		updateServer: boolean;
   };
-  walkingSpeed: number;
-	playerInfo: PlayerInfo;
+  
+  constructor(scene: SceneEx, character: CharacterEntity, x: number, y: number, z: number) {
+		super(scene, character.playerAssetKey, {x, y, z});
 
-  constructor(scene: SceneEx | Phaser.Scene, character: CharacterEntity, x: number | undefined, y: number | undefined, z: number) {
-    this.scene = scene as SceneEx;
     this.state = {
       isTouching: {
         left: false,
@@ -43,22 +40,15 @@ export default class Player {
         bottom: false,
       },
 			facing: Directions.S,
+			attacking: false,
       destroyed: false,
 			updateServer: false,
     };
-    this.walkingSpeed = 3;
 
-		this.playerInfo = playerService.getByKey(character.playerAssetKey);
-
-    this.createAnimations();
-    this.createPlayer(x, y, z);
+		this.create({x,y,z});
     this.createControls();
 
     this.state.destroyed = false;
-    this.scene.events.on("update", this.update, this);
-    this.scene.events.once("shutdown", this.destroy, this);
-    this.scene.events.once("destroy", this.destroy, this);
-
   }
 
   freeze() {
@@ -91,7 +81,7 @@ export default class Player {
       sprite.setVelocityY(this.walkingSpeed);
     }
 
-		if(sprite.body.velocity.x !== 0 || sprite.body.velocity.y !== 0) {
+		if(sprite.body.velocity.x !== 0 || sprite.body.velocity.y !== 0 || attacking) {
 			this.state.updateServer = true;
 		}
 
@@ -173,32 +163,32 @@ export default class Player {
 		}
   }
 
-  createPlayer(x: number | undefined, y: number | undefined, z: number) {
-    this.sprite = this.scene.matter.add.sprite(0, 0, this.playerInfo.primarySpritesheetKey, this.playerInfo.defaultFrame).setZ(z).setDepth(z);
+  createSprite(spawnCoords: Coordinates) {
+    this.sprite = this.scene.matter.add.sprite(0, 0, this.playerInfo.primarySpritesheetKey, this.playerInfo.defaultFrame).setZ(spawnCoords.z).setDepth(spawnCoords.z);
 
     const { width: w, height: h } = this.sprite;
     const mainBody = this.scene.matter.bodies.rectangle(0, h * 0.05, w * 0.6, h * 0.8, {chamfer: {radius: 10}, isSensor: false, label: "Player Main"});
     
-    this.sensors = {
+    this.playerSensors = {
       bottom: this.scene.matter.bodies.rectangle(0, h * 0.5, w * 0.25, 2, { isSensor: true, label: "Player Bottom" }),
       left: this.scene.matter.bodies.rectangle(-w * 0.35, h * 0.25 , 2, h * 0.25, { isSensor: true, label: "Player Left" }),
       right: this.scene.matter.bodies.rectangle(w * 0.35, h * 0.25, 2, h * 0.25, { isSensor: true, label: "Player Right" }),
     };
     const compoundBody = this.scene.matter.body.create({
-      parts: [mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right],
+      parts: [mainBody, this.playerSensors.bottom, this.playerSensors.left, this.playerSensors.right],
       render: { sprite: { xOffset: 0.5, yOffset: 0.5 } },
     });
-    (this.sprite.setExistingBody(compoundBody) as Phaser.Physics.Matter.Sprite).setFixedRotation().setPosition(x, y);
+    (this.sprite.setExistingBody(compoundBody) as Phaser.Physics.Matter.Sprite).setFixedRotation().setPosition(spawnCoords.x, spawnCoords.y);
    
     this.scene.matter.world.on("beforeupdate", this.resetTouching, this);
 
     this.scene.matterCollision.addOnCollideStart( {
-      objectA: [ this.sensors.bottom, this.sensors.left, this.sensors.right ],
+      objectA: [ this.playerSensors.bottom, this.playerSensors.left, this.playerSensors.right ],
       callback: this.onSensorCollide,
       context: this,
     });
     this.scene.matterCollision.addOnCollideActive({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right],
+      objectA: [this.playerSensors.bottom, this.playerSensors.left, this.playerSensors.right],
       callback: this.onSensorCollide,
       context: this,
     });
@@ -206,7 +196,6 @@ export default class Player {
 
 	createAnimations() {
 		const anims = this.scene.anims;
-
 		this.playerInfo.animations.forEach(animation => {
 			const thisAnimation: Phaser.Types.Animations.Animation = {
 				...animation,
@@ -234,11 +223,11 @@ export default class Player {
   onSensorCollide({ bodyA, bodyB }) {
     if (bodyB.isSensor) return; // We only care about collisions with physical objects
 
-    if (bodyA === this.sensors.left) {
+    if (bodyA === this.playerSensors.left) {
       this.state.isTouching.left = true;
-    } else if (bodyA === this.sensors.right) {
+    } else if (bodyA === this.playerSensors.right) {
       this.state.isTouching.right = true;
-    } else if (bodyA === this.sensors.bottom) {
+    } else if (bodyA === this.playerSensors.bottom) {
       this.state.isTouching.bottom = true;
     }
   }
@@ -248,23 +237,27 @@ export default class Player {
   }
 
 	updateServer() {
-		//console.log('hey');
-		//this.scene.socketManager.
+		this.scene.socketManager.sendPlayerState({
+			location: {
+				x: this.sprite.x,
+				y: this.sprite.y,
+				z: this.sprite.z,
+			},
+			animationKey: this.sprite.anims.currentAnim.key,
+		});
 	}
 
   destroy() {
-    // Clean up any listeners that might trigger events after the player is officially destroyed
-    this.scene.events.off("update", this.update, this);
-    this.scene.events.off("shutdown", this.destroy, this);
-    this.scene.events.off("destroy", this.destroy, this);
+		// Clean up any listeners that might trigger events after the player is officially destroyed
     if (this.scene.matter.world) {
       this.scene.matter.world.off("beforeupdate", this.resetTouching, this);
     }
-    const sensors = [this.sensors.bottom, this.sensors.left, this.sensors.right];
+    const sensors = [this.playerSensors.bottom, this.playerSensors.left, this.playerSensors.right];
     this.scene.matterCollision.removeOnCollideStart({ objectA: sensors });
     this.scene.matterCollision.removeOnCollideActive({ objectA: sensors });
 
     this.state.destroyed = true;
-    this.sprite.destroy();
+
+		super.destroy();
   }
 }

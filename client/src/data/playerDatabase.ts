@@ -357,7 +357,7 @@ const playerDB: Record<string, PlayerInfo> = {
 			{
 				spritesheetKey: 'chara2',
 				key: 'right',
-				frames: [72, 73, 74],
+				frames: [75, 76, 77],
 				frameRate: 10,
 				repeat: -1
 			},
@@ -421,7 +421,7 @@ const playerDB: Record<string, PlayerInfo> = {
 			{
 				spritesheetKey: 'chara2',
 				key: 'right',
-				frames: [75, 76, 77],
+				frames: [78, 79, 80],
 				frameRate: 10,
 				repeat: -1
 			},
@@ -485,7 +485,7 @@ const playerDB: Record<string, PlayerInfo> = {
 			{
 				spritesheetKey: 'chara2',
 				key: 'right',
-				frames: [78, 79, 80],
+				frames: [81, 82, 83],
 				frameRate: 10,
 				repeat: -1
 			},

@@ -7,6 +7,7 @@ import Actor from "./Actors/Actor";
 import Player from "./Player";
 import { findPropertyByName, TiledProperty } from "./TiledHelpers";
 import spritesheetServiceInstance, { SpritesheetService } from "../services/SpritesheetService";
+import PlayerActor from "./Actors/PlayerActor";
 
 export interface SceneHandoffData {
     transitionProperties?: TiledProperty[];
@@ -20,7 +21,7 @@ export default class SceneEx extends Phaser.Scene {
     player: Player;
     handoffData: SceneHandoffData;
 		actors: Actor[];
-		otherPlayers: Actor[];
+		otherPlayers: PlayerActor[];
 		socketManager: SocketManager;
 		spritesheetService: SpritesheetService;
 
@@ -64,7 +65,7 @@ export default class SceneEx extends Phaser.Scene {
 			const transitionObject = this.matter.add.rectangle(object.x + (object.width / 2) , object.y + (object.height / 2), object.width, object.height, { isStatic: true, isSensor: true });
 
 			(this as SceneEx).matterCollision.addOnCollideStart( {
-					objectA: [this.player.sensors.left, this.player.sensors.right, this.player.sensors.bottom],
+					objectA: [this.player.playerSensors.left, this.player.playerSensors.right, this.player.playerSensors.bottom],
 					objectB: transitionObject,
 					callback: () => {
 							this.handleSceneTransition(object);
@@ -126,8 +127,10 @@ export default class SceneEx extends Phaser.Scene {
 		const toSpawnIdProperty = findPropertyByName(this.handoffData.transitionProperties, "toSpawnId");
 
 		const spawnLayer = this.map.getObjectLayer("Spawn");
-		const { x, y } = this.findPlayerSpawnPoint(toSpawnIdProperty?.value);
-		const z = findPropertyByName(spawnLayer.properties as unknown as TiledProperty[], "depth")?.value ?? 0;
+		const tileObject = this.findPlayerSpawnPoint(toSpawnIdProperty?.value),
+					x = tileObject.x ?? 0,
+					y = tileObject.y ?? 0,
+					z = findPropertyByName(spawnLayer.properties as unknown as TiledProperty[], "depth")?.value ?? 0;
 
 		this.player = new Player(this, this.socketManager.character, x, y, z);
 		this.socketManager.updateMapForPlayer(findPropertyByName(this.handoffData.transitionProperties, "map")?.value)

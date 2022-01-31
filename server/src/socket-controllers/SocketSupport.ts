@@ -1,12 +1,20 @@
-export interface SocketRequest {
+import { Location } from '../entities/Location';
+
+export type SocketRequest = {
+  type: SocketActionTypes;
   data: any;
+};
+
+export type SocketResponse = {
+  data: any;
+};
+
+export enum SocketActionTypes {
+  Generic = '',
+  PlayerState = 'PlayerState',
 }
 
-export interface SocketResponse {
-  data: any;
-}
-
-export default interface SocketSupport {
-  SocketRequest: SocketRequest;
-  SocketResponse: SocketResponse;
-}
+export type PlayerStateAction = {
+  location?: Location;
+  animationKey?: string;
+};
