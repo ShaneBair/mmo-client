@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+import Phaser, { Scene } from "phaser";
 import { Character as CharacterEntity } from "../../../../server/src/entities/Character";
 import MultiKey from "../tools/MultiKey";
 import SceneEx from "./SceneEx";
@@ -7,7 +7,7 @@ import playerService from "../services/PlayerService";
 import { PlayerInfo } from "../../data/playerDatabase";
 
 export default class Player {
-  scene: Phaser.Scene;
+  scene: SceneEx;
   sprite: Phaser.Physics.Matter.Sprite;
   keys: {
     up: MultiKey,
@@ -29,12 +29,13 @@ export default class Player {
     },
 		facing: Directions,
     destroyed: boolean;
+		updateServer: boolean;
   };
   walkingSpeed: number;
 	playerInfo: PlayerInfo;
 
-  constructor(scene: Phaser.Scene, character: CharacterEntity, x: number | undefined, y: number | undefined, z: number) {
-    this.scene = scene;
+  constructor(scene: SceneEx | Phaser.Scene, character: CharacterEntity, x: number | undefined, y: number | undefined, z: number) {
+    this.scene = scene as SceneEx;
     this.state = {
       isTouching: {
         left: false,
@@ -43,6 +44,7 @@ export default class Player {
       },
 			facing: Directions.S,
       destroyed: false,
+			updateServer: false,
     };
     this.walkingSpeed = 3;
 
@@ -64,6 +66,7 @@ export default class Player {
   }
 
   update() {
+		this.state.updateServer = false;
     if(this.state.destroyed) return;
 
     const sprite = this.sprite;
@@ -87,6 +90,10 @@ export default class Player {
     } else if(moving.down) {
       sprite.setVelocityY(this.walkingSpeed);
     }
+
+		if(sprite.body.velocity.x !== 0 || sprite.body.velocity.y !== 0) {
+			this.state.updateServer = true;
+		}
 
 		this.sprite.flipX = false;
     // Update the animation last and give left/right animations precedence over up/down animations
@@ -160,6 +167,10 @@ export default class Player {
       this.sprite.anims.stop();
 			this.sprite.setFrame(frame);
     }
+
+		if(this.state.updateServer) {
+			this.updateServer();
+		}
   }
 
   createPlayer(x: number | undefined, y: number | undefined, z: number) {
@@ -181,12 +192,12 @@ export default class Player {
    
     this.scene.matter.world.on("beforeupdate", this.resetTouching, this);
 
-    (this.scene as SceneEx).matterCollision.addOnCollideStart( {
+    this.scene.matterCollision.addOnCollideStart( {
       objectA: [ this.sensors.bottom, this.sensors.left, this.sensors.right ],
       callback: this.onSensorCollide,
       context: this,
     });
-    (this.scene as SceneEx).matterCollision.addOnCollideActive({
+    this.scene.matterCollision.addOnCollideActive({
       objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right],
       callback: this.onSensorCollide,
       context: this,
@@ -236,6 +247,11 @@ export default class Player {
     this.state.isTouching = { left: false, right: false, bottom: false };
   }
 
+	updateServer() {
+		//console.log('hey');
+		//this.scene.socketManager.
+	}
+
   destroy() {
     // Clean up any listeners that might trigger events after the player is officially destroyed
     this.scene.events.off("update", this.update, this);
@@ -245,8 +261,8 @@ export default class Player {
       this.scene.matter.world.off("beforeupdate", this.resetTouching, this);
     }
     const sensors = [this.sensors.bottom, this.sensors.left, this.sensors.right];
-    (this.scene as SceneEx).matterCollision.removeOnCollideStart({ objectA: sensors });
-    (this.scene as SceneEx).matterCollision.removeOnCollideActive({ objectA: sensors });
+    this.scene.matterCollision.removeOnCollideStart({ objectA: sensors });
+    this.scene.matterCollision.removeOnCollideActive({ objectA: sensors });
 
     this.state.destroyed = true;
     this.sprite.destroy();

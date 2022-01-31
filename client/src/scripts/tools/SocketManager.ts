@@ -8,6 +8,8 @@ export enum EventType {
   CHARACTER_UNLOAD = 'player:unload_character',
   CHARACTER_UNLOADED = 'player:character_unloaded',
 	JOIN_MAP = 'player:join_map',
+
+	SOCKET_NOT_FOUND = 'connection:socket_404',
 }
 
 export class SocketManager {
@@ -21,7 +23,7 @@ export class SocketManager {
 	}
 
 	updateMapForPlayer(mapName: string | undefined) {
-		this.socket.emit(EventType.JOIN_MAP, mapName);
+		this.socket.emit(EventType.JOIN_MAP, { data: mapName});
 	}
 }
 

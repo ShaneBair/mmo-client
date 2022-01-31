@@ -5,4 +5,6 @@ export enum EventType {
   CHARACTER_UNLOAD = 'player:unload_character',
   CHARACTER_UNLOADED = 'player:character_unloaded',
   JOIN_MAP = 'player:join_map',
+
+  SOCKET_NOT_FOUND = 'connection:socket_404',
 }

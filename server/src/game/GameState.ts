@@ -23,6 +23,10 @@ export default class GameState {
     Logger.debug(`GameState.players.length: ${this.players.length}`);
   }
 
+  getPlayerBySocketId(socketId: string): PlayerState | undefined {
+    return this.players.find((p) => p.socketId === socketId);
+  }
+
   removePlayer(socketId: string) {
     const index = this.players.findIndex(
       (player) => player.socketId === socketId
