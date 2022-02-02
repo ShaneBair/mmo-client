@@ -77,3 +77,8 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F2C82AE8D87E434A8651D1FDDC197DBB }}
           package: .
+
+      - name: 'Delete Artifact because I am cheap'
+        uses: greekyeggo/delete-artifact@v1
+        with: 
+          name: icy-pebble-mmo-server
