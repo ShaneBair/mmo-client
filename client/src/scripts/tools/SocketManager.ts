@@ -12,12 +12,16 @@ export enum EventType {
 	PLAYER_STATE_UPDATE = 'player:state_update',
   PLAYER_STATE_UPDATED = 'player:stated_updated',
 
+	SCENE_UPDATE_REQUEST = 'scene:update_request',
+	SCENE_UPDATE = 'scene:update',
+
 	SOCKET_NOT_FOUND = 'connection:socket_404',
 }
 
 export enum SocketActionTypes {
   Generic = '',
   PlayerState = 'PlayerState',
+	SceneUpdate = 'SceneUpdate',
 }
 
 export class SocketManager {
@@ -35,11 +39,15 @@ export class SocketManager {
 	}
 
 	sendPlayerState(stateUpdate: PlayerStateAction) {
-		const request: SocketRequest = {
+		const request = {
 			data: stateUpdate,
 			type: SocketActionTypes.PlayerState,
 		}
 		this.socket.emit(EventType.PLAYER_STATE_UPDATE, request);
+	}
+
+	requestSceneStatus(sceneKey: string) {
+		this.socket.emit(EventType.SCENE_UPDATE_REQUEST, { type: SocketActionTypes.SceneUpdate, data: sceneKey} );
 	}
 }
 

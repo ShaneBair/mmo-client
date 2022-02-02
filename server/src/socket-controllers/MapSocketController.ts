@@ -13,7 +13,7 @@ import { Container } from 'typedi';
 import GameState from '../game/GameState';
 import { EventType } from './EventType';
 import CharacterService from '../api/services/CharacterService';
-import { SocketRequest } from './SocketSupport';
+import { SocketRequest, SocketResponse } from './SocketSupport';
 
 @SocketController()
 export default class MapSocketController {
@@ -40,11 +40,26 @@ export default class MapSocketController {
       throw new Error('Socket Not Found');
     }
 
+    const newLocation = {
+      ...playerState.character.location,
+      mapName: request.data,
+    };
+
     this.characterService.update(playerState.character.id.toString(), {
-      location: {
-        ...playerState.character.location,
-        mapName: request.data,
-      },
+      location: newLocation,
     });
+    this.gameState.getPlayerBySocketId(id).character.location = newLocation;
+  }
+
+  @OnMessage(EventType.SCENE_UPDATE_REQUEST)
+  @EmitOnSuccess(EventType.SCENE_UPDATE)
+  async sceneUpdate(
+    @ConnectedSocket() socket: any,
+    @SocketId() id: string,
+    @MessageBody() request: SocketRequest
+  ): Promise<SocketResponse> {
+    return {
+      data: this.gameState.getPlayersInMap(request.data),
+    };
   }
 }

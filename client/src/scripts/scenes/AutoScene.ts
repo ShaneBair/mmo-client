@@ -3,6 +3,9 @@ import SceneEx from "../objects/SceneEx";
 import mapService from "../services/MapService";
 import tilesetService from "../services/TilesetService";
 import playerService from "../services/PlayerService";
+import { EventType } from "../tools/SocketManager";
+import PlayerState from '../../../../server/src/game/PlayerState';
+import { SocketResponse } from "../../../../server/src/socket-controllers/SocketSupport";
 
 export default class AutoScene extends SceneEx {
 	constructor() {
@@ -48,15 +51,17 @@ export default class AutoScene extends SceneEx {
 		
 		this.updateCamera();
 		this.createTransitionPoints();
+
+		this.socketManager.socket.on(EventType.SCENE_UPDATE, (response: SocketResponse) => {
+			const data = response.data as PlayerState[];
+			console.log(data);
+		});
+
 		this.cameras.main.fadeIn(1000, 0, 0, 0);
 	}
 
 	updateCamera() {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.startFollow(this.player.sprite, false, 0.5, 0.5);
-	}
-
-	update() {
-			// shh red lines
 	}
 }

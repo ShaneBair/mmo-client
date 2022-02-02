@@ -12,6 +12,7 @@ export type SocketResponse = {
 export enum SocketActionTypes {
   Generic = '',
   PlayerState = 'PlayerState',
+  SceneUpdate = 'SceneUpdate',
 }
 
 export type PlayerStateAction = {

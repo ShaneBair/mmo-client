@@ -8,5 +8,8 @@ export enum EventType {
   PLAYER_STATE_UPDATE = 'player:state_update',
   PLAYER_STATE_UPDATED = 'player:stated_updated',
 
+  SCENE_UPDATE_REQUEST = 'scene:update_request',
+  SCENE_UPDATE = 'scene:update',
+
   SOCKET_NOT_FOUND = 'connection:socket_404',
 }

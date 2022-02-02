@@ -18,6 +18,7 @@ export default class SceneEx extends Phaser.Scene {
     matterCollision: PhaserMatterCollisionPlugin;
 
 		map: Phaser.Tilemaps.Tilemap;
+		mapKey: string;
     player: Player;
     handoffData: SceneHandoffData;
 		actors: Actor[];
@@ -133,7 +134,8 @@ export default class SceneEx extends Phaser.Scene {
 					z = findPropertyByName(spawnLayer.properties as unknown as TiledProperty[], "depth")?.value ?? 0;
 
 		this.player = new Player(this, this.socketManager.character, x, y, z);
-		this.socketManager.updateMapForPlayer(findPropertyByName(this.handoffData.transitionProperties, "map")?.value)
+		this.mapKey = findPropertyByName(this.handoffData.transitionProperties, "map")?.value;
+		this.socketManager.updateMapForPlayer(this.mapKey);
 	}
 
 	createMapTileLayers() {
@@ -144,5 +146,9 @@ export default class SceneEx extends Phaser.Scene {
 			currentLayer.setDepth(depth);
 			this.matter.world.convertTilemapLayer(currentLayer);
 		});
+	}
+
+	update(time: number, delta: number): void {
+		this.socketManager.requestSceneStatus(this.mapKey ?? this.scene.key);
 	}
 }
