@@ -1,13 +1,14 @@
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import { ActorInfo } from "../../data/actorDatabase";
 import actorFactory from "../factories/ActorFactory";
-import actorService from "../services/ActorService";
 import {SocketManager} from "../tools/SocketManager";
 import Actor from "./Actors/Actor";
 import Player from "./Player";
 import { findPropertyByName, TiledProperty } from "./TiledHelpers";
 import spritesheetServiceInstance, { SpritesheetService } from "../services/SpritesheetService";
 import PlayerActor from "./Actors/PlayerActor";
+import PlayerState from "../../../../server/src/game/PlayerState";
+import { Coordinates } from "./types";
 
 export interface SceneHandoffData {
     transitionProperties?: TiledProperty[];
@@ -148,7 +149,40 @@ export default class SceneEx extends Phaser.Scene {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	update(time: number, delta: number): void {
 		this.socketManager.requestSceneStatus(this.mapKey ?? this.scene.key);
+	}
+
+	updatePlayersOnScene(data: PlayerState[]) {
+		data.forEach( (playerState) => {
+			const player = this.otherPlayers.find(p => p?.playerState?.socketId === playerState?.socketId);
+			if(player !== undefined) {
+				player.sprite.setPosition(playerState.character.location?.x, playerState.character.location?.y, playerState.character.location?.z);
+				player.sprite.play(`${playerState.character.playerAssetKey}-${playerState.animation.animationKey}`, true);
+				if(playerState.animation.stopAnimation) {
+					player.sprite.anims.stop();
+					player.sprite.setFrame(playerState.animation.setFrame);
+				}
+			}
+		});
+	}
+
+	addPlayerToScene(data: PlayerState) {
+		if(data.socketId === this.socketManager.socket.id) return;
+
+		if(!this.otherPlayers.find(p => p?.playerState?.socketId === data.socketId)) {
+			const playerActor = new PlayerActor(this, data.character.playerAssetKey, data.character.location as Coordinates, false);
+			playerActor.playerState = data;
+
+			this.otherPlayers.push(playerActor);
+		}
+	}
+
+	removePlayerFromScene(socketId: string) {
+		const playerIndex = this.otherPlayers.findIndex(p => p.playerState.socketId === socketId);
+		this.otherPlayers[playerIndex]?.destroy();
+
+		this.otherPlayers.slice(playerIndex, 1);
 	}
 }

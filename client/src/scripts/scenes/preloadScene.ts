@@ -25,7 +25,6 @@ export default class PreloadScene extends Phaser.Scene {
 
   create() {
 		socketManager.socket.on(EventType.CHARACTER_LOADED, (character: CharacterEntity) => {
-			console.log(character);
 			socketManager.character = character;
 
 			if(character?.location?.mapName === undefined) return;

@@ -14,6 +14,7 @@ import GameState from '../game/GameState';
 import { EventType } from './EventType';
 import CharacterService from '../api/services/CharacterService';
 import { PlayerStateAction, SocketRequest } from './SocketSupport';
+import { Socket } from 'socket.io';
 
 @SocketController()
 export default class GameSocketController {
@@ -27,7 +28,7 @@ export default class GameSocketController {
 
   @OnMessage(EventType.PLAYER_STATE_UPDATE)
   async playerStateUpdate(
-    @ConnectedSocket() socket: any,
+    @ConnectedSocket() socket: Socket,
     @SocketId() id: string,
     @MessageBody() request: SocketRequest
   ) {
@@ -44,6 +45,8 @@ export default class GameSocketController {
       y: data.location.y,
       z: data.location.z,
     };
-    playerState.animationKey = data.animationKey;
+    playerState.animation.animationKey = data.animationKey;
+    playerState.animation.stopAnimation = data.stopAnimation;
+    playerState.animation.setFrame = data.setFrame;
   }
 }

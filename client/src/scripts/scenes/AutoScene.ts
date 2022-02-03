@@ -54,8 +54,17 @@ export default class AutoScene extends SceneEx {
 
 		this.socketManager.socket.on(EventType.SCENE_UPDATE, (response: SocketResponse) => {
 			const data = response.data as PlayerState[];
-			console.log(data);
+			this.updatePlayersOnScene(data);
 		});
+
+		this.socketManager.socket.on(EventType.NEW_PLAYER_ON_MAP, ( response: SocketResponse) => {
+			const data = response.data as PlayerState;
+			this.addPlayerToScene(data);
+		});
+
+		this.socketManager.socket.on(EventType.PLAYER_LEFT_MAP, (response: SocketResponse) => {
+			this.removePlayerFromScene(response.data);
+		})
 
 		this.cameras.main.fadeIn(1000, 0, 0, 0);
 	}

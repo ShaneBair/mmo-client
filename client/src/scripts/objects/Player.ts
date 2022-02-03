@@ -4,6 +4,7 @@ import MultiKey from "../tools/MultiKey";
 import SceneEx from "./SceneEx";
 import { Coordinates, Directions } from "./types";
 import PlayerActor from "./Actors/PlayerActor";
+import { ActorType } from "../../data/actorDatabase";
 
 export default class Player extends PlayerActor {
   keys: {
@@ -31,7 +32,8 @@ export default class Player extends PlayerActor {
   };
   
   constructor(scene: SceneEx, character: CharacterEntity, x: number, y: number, z: number) {
-		super(scene, character.playerAssetKey, {x, y, z});
+		super(scene, character.playerAssetKey, {x, y, z}, true);
+		this.playerInfo.type = ActorType.CurrentPlayer;
 
     this.state = {
       isTouching: {
@@ -44,7 +46,7 @@ export default class Player extends PlayerActor {
       destroyed: false,
 			updateServer: false,
     };
-
+		
 		this.create({x,y,z});
     this.createControls();
 
@@ -56,6 +58,10 @@ export default class Player extends PlayerActor {
   }
 
   update() {
+		const oldUpdate = this.state.updateServer;
+		let stopAnimation = false;
+		let setFrame = -1;
+
 		this.state.updateServer = false;
     if(this.state.destroyed) return;
 
@@ -156,10 +162,12 @@ export default class Player extends PlayerActor {
 			this.sprite.anims.play(animation);
       this.sprite.anims.stop();
 			this.sprite.setFrame(frame);
+			stopAnimation = true;
+			setFrame = frame;
     }
 
-		if(this.state.updateServer) {
-			this.updateServer();
+		if(this.state.updateServer || oldUpdate !== this.state.updateServer) {
+			this.updateServer(stopAnimation, setFrame);
 		}
   }
 
@@ -236,7 +244,7 @@ export default class Player extends PlayerActor {
     this.state.isTouching = { left: false, right: false, bottom: false };
   }
 
-	updateServer() {
+	updateServer(stopAnimation: boolean, setFrame: number) {
 		this.scene.socketManager.sendPlayerState({
 			location: {
 				x: this.sprite.x,
@@ -244,6 +252,8 @@ export default class Player extends PlayerActor {
 				z: this.sprite.z,
 			},
 			animationKey: this.sprite.anims.currentAnim.key,
+			stopAnimation: stopAnimation,
+			setFrame: setFrame,
 		});
 	}
 

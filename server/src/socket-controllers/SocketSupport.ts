@@ -18,4 +18,6 @@ export enum SocketActionTypes {
 export type PlayerStateAction = {
   location?: Location;
   animationKey?: string;
+  stopAnimation?: boolean;
+  setFrame?: number;
 };
