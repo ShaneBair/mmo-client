@@ -79,6 +79,6 @@ jobs:
           package: .
 
       - name: 'Delete Artifact because I am cheap'
-        uses: greekyeggo/delete-artifact@v1
+        uses: GeekyEggo/delete-artifact@v1.0.0
         with: 
           name: icy-pebble-mmo-server
